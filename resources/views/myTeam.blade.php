@@ -8,13 +8,14 @@
 @if($league==1)
 <?php 
     $user = Auth::user()->toArray();
+    $season = App\Season::where('id','=',$info->season)->first();
 ?>
 @if($user['id']==$info->manager)
 @section('content')
 <div class="row justify-content-center" style='margin-top:30px;'>
     <div class="col-md-4">
         <div class="card">
-            <div class="card-header">Menu</div>
+            <div class="card-header">Menu for {{$season->seasonName}} season</div>
             <div class="card-body">
                 <p><a class="btn btn-primary @if($page=='home') active @endif" style='width:100%;' href='{{url('team='.$info->id.'/page=home')}}'>Home</a></p>
                 <p><a class="btn btn-primary @if($page=='roster') active @endif" style='width:100%;' href='{{url('team='.$info->id.'/page=roster')}}'>Team Roster</a></p>
@@ -22,7 +23,7 @@
                 <p><a class="btn btn-primary @if($page=='trades') active @endif" style='width:100%;' href='{{url('team='.$info->id.'/page=trades')}}'>Trade Center</a></p>
                 <p><a class="btn btn-primary @if($page=='agency') active @endif" style='width:100%;' href='{{url('team='.$info->id.'/page=agency')}}'>Free agency</a></p>
                 <p><a class="btn btn-primary @if($page=='games') active @endif" style='width:100%;' href='{{url('team='.$info->id.'/page=games')}}'>Games</a></p>
-                <p><a class="btn btn-primary @if($page=='stats') active @endif" style='width:100%;' href='{{url('team='.$info->id.'/page=stats')}}'>Player Statistics</a></p>
+                <p><a class="btn btn-primary @if($page=='stats') active @endif" style='width:100%;' href='{{url('team='.$info->id.'/page=regular')}}'>Player Statistics</a></p>
             </div>
         </div>
     </div>
@@ -32,7 +33,7 @@
             <div class="card-header">{{$info->teamName}}</div>
 
             <div class="card-body">
-                Next Game: @if($info->id==$nextGame->HostTeam)Hosting {{$teams[$nextGame->VisitingTeam-1]['teamName']}}@else At {{$teams[$nextGame->HostTeam-1]['teamName']}}@endif 
+                Next game:<a href=''> @if($info->id==$nextGame->HostTeam)Hosting @else At @endif {{$opponent->teamName}} on {{$nextGame->date}}</a>
             </div>
         </div>
     </div>
@@ -52,7 +53,7 @@
                     </tr>
                     @foreach($players as $player)
                     @if($player->position=='G' && $player->team==$info->id)
-                    <tr onclick="location.href='{{url('players')}}'" style="cursor:pointer;">
+                    <tr onclick="location.href='{{url('players='.$player->id)}}'" style="cursor:pointer;">
                         <td style='border:solid; border-width:1px;'>{{$player->number}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->name}} {{$player->surname}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->birthday}}</td>
@@ -70,7 +71,7 @@
                     </tr>
                     @foreach($players as $player)
                     @if($player->position=='D' && $player->team==$info->id)
-                    <tr onclick="location.href='{{url('players')}}'" style="cursor:pointer;">
+                    <tr onclick="location.href='{{url('players='.$player->id)}}'" style="cursor:pointer;">
                         <td style='border:solid; border-width:1px;'>{{$player->number}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->name}} {{$player->surname}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->birthday}}</td>
@@ -88,7 +89,7 @@
                     </tr>
                     @foreach($players as $player)
                     @if($player->position=='F' && $player->team==$info->id)
-                    <tr onclick="location.href='{{url('players')}}'" style="cursor:pointer;">
+                    <tr onclick="location.href='{{url('players='.$player->id)}}'" style="cursor:pointer;">
                         <td style='border:solid; border-width:1px;'>{{$player->number}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->name}} {{$player->surname}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->birthday}}</td>
@@ -106,9 +107,9 @@
     <div class="col-md-8">
         <div class="card">
             <div class="card-header">Contracts</div>
-
             <div class="card-body">
                 <table>
+                    <?php $total=0; ?>
                     <tr>
                         <td style='border:solid; border-width:1px; font-weight:bold;'>Number</td>
                         <td style='border:solid; border-width:1px; font-weight:bold;'>Goalie</td>
@@ -119,13 +120,14 @@
                     </tr>
                     @foreach($players as $player)
                     @if($player->position=='G' && $player->team==$info->id)
-                    <tr onclick="location.href='{{url('players')}}'" style="cursor:pointer;">
+                    <?php $total+=$player->Cap; ?>
+                    <tr>
                         <td style='border:solid; border-width:1px;'>{{$player->number}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->name}} {{$player->surname}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->Cap}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->Years}}</td>
-                        <td style='border:solid; border-width:1px;'><div class="btn btn-secondary">Extend</div></td>
-                        <td style='border:solid; border-width:1px;'><div class="btn btn-secondary">Release</div></td>
+                        <td style='border:solid; border-width:1px;'><div class="btn btn-secondary" onclick="location.href='{{url('team='.$info->id.'/sign='.$player->id)}}'">Extend</div></td>
+                        <td style='border:solid; border-width:1px;'><div class="btn btn-secondary" onclick="location.href='{{url('player='.$player->id.'/release')}}'">Release</div></td>
                     </tr>
                     @endif
                     @endforeach
@@ -139,13 +141,14 @@
                     </tr>
                     @foreach($players as $player)
                     @if($player->position=='D' && $player->team==$info->id)
-                    <tr onclick="location.href='{{url('players')}}'" style="cursor:pointer;">
+                    <?php $total+=$player->Cap; ?>
+                    <tr>
                         <td style='border:solid; border-width:1px;'>{{$player->number}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->name}} {{$player->surname}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->Cap}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->Years}}</td>
-                        <td style='border:solid; border-width:1px;'><div class="btn btn-secondary">Extend</div></td>
-                        <td style='border:solid; border-width:1px;'><div class="btn btn-secondary">Release</div></td>
+                        <td style='border:solid; border-width:1px;'><div class="btn btn-secondary" onclick="location.href='{{url('team='.$info->id.'/sign='.$player->id)}}'">Extend</div></td>
+                        <td style='border:solid; border-width:1px;'><div class="btn btn-secondary" onclick="location.href='{{url('player='.$player->id.'/release')}}'">Release</div></td>
                     </tr>
                     @endif
                     @endforeach
@@ -159,16 +162,25 @@
                     </tr>
                     @foreach($players as $player)
                     @if($player->position=='F' && $player->team==$info->id)
-                    <tr onclick="location.href='{{url('players')}}'" style="cursor:pointer;">
+                    <?php $total+=$player->Cap; ?>
+                    <tr>
                         <td style='border:solid; border-width:1px;'>{{$player->number}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->name}} {{$player->surname}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->Cap}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->Years}}</td>
-                        <td style='border:solid; border-width:1px;'><div class="btn btn-secondary">Extend</div></td>
-                        <td style='border:solid; border-width:1px;'><div class="btn btn-secondary">Release</div></td>
+                        <td style='border:solid; border-width:1px;'><div class="btn btn-secondary" onclick="location.href='{{url('team='.$info->id.'/sign='.$player->id)}}'">Extend</div></td>
+                        <td style='border:solid; border-width:1px;'><div class="btn btn-secondary" onclick="location.href='{{url('player='.$player->id.'/release')}}'">Release</div></td>
                     </tr>
                     @endif
                     @endforeach
+                    <tr>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'></td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>Total:</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{$total}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'></td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'></td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'></td>
+                    </tr>
                 </table>
             </div>
         </div>
@@ -191,6 +203,10 @@
             <div class="card-header">Free Agency</div>
 
             <div class="card-body">
+                <?php 
+                    $temp = App\Player::where('team','=',NULL)->get();
+                ?>
+                @if(count($temp)>0)
                 <table>
                     <tr>
                         <td style='border:solid; border-width:1px; font-weight:bold;'>#</td>
@@ -210,10 +226,13 @@
                         <td style='border:solid; border-width:1px;'>{{$player->birthday}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->height}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->weight}}</td>
-                        <td style='border:solid; border-width:1px;'><div class="btn btn-secondary" onclick="location.href='{{url('players')}}'">Sign</div></td>
+                        <td style='border:solid; border-width:1px;'><div class="btn btn-secondary" onclick="location.href='{{url('team='.$info->id.'/sign='.$player->id)}}'">Sign</div></td>
                     </tr>
                     @endif
                     @endforeach
+                @else
+                There are no free agents.
+                @endif
                 </table>
             </div>
         </div>
@@ -225,6 +244,8 @@
             <div class="card-header">Games</div>
 
             <div class="card-body">
+            @if(count($games)>0)
+                <p><h4>Regular season</h4></p>
                 <table>
                 @foreach($games as $game)
                     <?php
@@ -233,7 +254,7 @@
                         $host = App\Team::where('id','=',$game->HostTeam)->first();
                         $visit = App\Team::where('id','=',$game->VisitingTeam)->first();
                     ?>
-                @if($game->season==$info->season)
+                @if($game->season==$info->season && $game->type==1)
                     <tr onclick="location.href='{{url('home')}}'" style="cursor:pointer;">
                         <td style='border:solid; border-width:1px; width:600px;'>{{$league->leagueName}} {{$season->seasonName}} - {{$game->date}} - {{$host->teamName}} vs {{$visit->teamName}}</td>
                         <td style='border:solid; border-width:1px; width:50px;'>@if($game->HomeScore!=NULL && $game->VisitorScore!=NULL){{$game->HomeScore}} : {{$game->VisitorScore}} @endif</td>
@@ -241,16 +262,37 @@
                 @endif
                 @endforeach
                 </table>
+                <p><h4>Play-offs</h4></p>
+                <table>
+                @foreach($games as $game)
+                    <?php
+                        $season = App\Season::where('id','=',$game->season)->first();
+                        $league = App\League::where('id','=',$season->league)->first();
+                        $host = App\Team::where('id','=',$game->HostTeam)->first();
+                        $visit = App\Team::where('id','=',$game->VisitingTeam)->first();
+                    ?>
+                @if($game->season==$info->season && $game->type==2)
+                    <tr onclick="location.href='{{url('home')}}'" style="cursor:pointer;">
+                        <td style='border:solid; border-width:1px; width:600px;'>{{$league->leagueName}} {{$season->seasonName}} - {{$game->date}} - {{$host->teamName}} vs {{$visit->teamName}}</td>
+                        <td style='border:solid; border-width:1px; width:50px;'>@if($game->HomeScore!=NULL && $game->VisitorScore!=NULL){{$game->HomeScore}} : {{$game->VisitorScore}} @endif</td>
+                    </tr>
+                @endif
+                @endforeach
+                </table>
+            @else 
+            There are no games.
+            @endif
             </div>
         </div>
     </div>
     @endif
-    @if($page=='stats')
+    @if($page=='regular' || $page=='playoff')
     <div class="col-md-8">
         <div class="card">
             <div class="card-header">Player Statistics</div>
-
             <div class="card-body">
+                <p><div class="btn btn-primary @if($page=='regular') active @endif" style='width:49%;' onclick="location.href='{{url('team='.$info->id.'/page=regular')}}'">Regular Season</div>
+                <div class="btn btn-primary @if($page=='playoff') active @endif" style='width:49%;' onclick="location.href='{{url('team='.$info->id.'/page=playoff')}}'"}}'>Play offs</div></p>
                 <table>
                     <tr>
                         <td style='border:solid; border-width:1px; font-weight:bold;'>Number</td>
@@ -273,18 +315,22 @@
                         $seconds = 0;
                         foreach($goalies as $goalie)
                         {
-                            $games += $goalie->games;
-                            $shots += $goalie->SOG;
-                            $goals += $goalie->GA;
-                            $shutouts += $goalie->shutouts;
-                            $seconds += $goalie->seconds;
+                            $game = App\Game::where('id','=',$goalie->game)->first();
+                            if(($page=='regular' && $game->type==1) || ($page=='playoff' && $game->type==2))
+                            {
+                                $games += $goalie->games;
+                                $shots += $goalie->SOG;
+                                $goals += $goalie->GA;
+                                $shutouts += $goalie->shutouts;
+                                $seconds += $goalie->seconds;
+                            }
                         }
                         $average = 0;
                         $percentage = 0;
-                        if($seconds != 0) $average = $goals*3600/$seconds;
-                        if($shots != 0) $percentage = ($shots-$goals)*100/$shots;
+                        if($seconds != 0) $average = number_format(($goals*3600/$seconds), 2, '.', '');
+                        if($shots != 0) $percentage = number_format((($shots-$goals)*100/$shots), 2, '.', '');
                     ?>
-                    <tr onclick="location.href='{{url('players')}}'" style="cursor:pointer;">
+                    <tr onclick="location.href='{{url('players='.$player->id)}}'" style="cursor:pointer;">
                         <td style='border:solid; border-width:1px;'>{{$player->number}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->name}} {{$player->surname}}</td>
                         <td style='border:solid; border-width:1px;'>{{$games}}</td>
@@ -315,17 +361,21 @@
                         $assists = 0;
                         $coeficient = 0;
                         $penalties = 0;
-                        foreach($fields as $field)
+                        foreach($fields as $stats)
                         {
-                            $games += $field->games;
-                            $assists += $field->asists;
-                            $goals += $field->goals;
-                            $coeficient += $field->plus/minus;
-                            $penalties += $field->PIM;
+                            $game = App\Game::where('id','=',$goalie->game)->first();
+                            if(($page=='regular' && $game->type==1) || ($page=='playoff' && $game->type==2))
+                            {  
+                                $games += $stats->games;
+                                $assists += $stats->assists;
+                                $goals += $stats->goals;
+                                $coeficient += $stats->plus_minus;
+                                $penalties += $stats->PIM;
+                            }
                         }
                         $points = $goals+$assists;
                     ?>
-                    <tr onclick="location.href='{{url('players')}}'" style="cursor:pointer;">
+                    <tr onclick="location.href='{{url('players='.$player->id)}}'" style="cursor:pointer;">
                         <td style='border:solid; border-width:1px;'>{{$player->number}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->name}} {{$player->surname}}</td>
                         <td style='border:solid; border-width:1px;'>{{$games}}</td>
@@ -356,17 +406,21 @@
                         $assists = 0;
                         $coeficient = 0;
                         $penalties = 0;
-                        foreach($fields as $field)
+                        foreach($fields as $stats)
                         {
-                            $games += $field->games;
-                            $assists += $field->asists;
-                            $goals += $field->goals;
-                            $coeficient += $field->plus/minus;
-                            $penalties += $field->PIM;
+                            $game = App\Game::where('id','=',$goalie->game)->first();
+                            if(($page=='regular' && $game->type==1) || ($page=='playoff' && $game->type==2))
+                            {
+                                $games += $stats->games;
+                                $assists += $stats->assists;
+                                $goals += $stats->goals;
+                                $coeficient += $stats->plus_minus;
+                                $penalties += $stats->PIM;
+                            }
                         }
                         $points = $goals+$assists;
                     ?>
-                    <tr onclick="location.href='{{url('players')}}'" style="cursor:pointer;">
+                    <tr onclick="location.href='{{url('players='.$player->id)}}'" style="cursor:pointer;">
                         <td style='border:solid; border-width:1px;'>{{$player->number}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->name}} {{$player->surname}}</td>
                         <td style='border:solid; border-width:1px;'>{{$games}}</td>
