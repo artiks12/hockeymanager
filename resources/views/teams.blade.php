@@ -7,48 +7,15 @@
             <div class="card-header">Filter</div>
 
             <div class="card-body">
-                {{ Form::open([ 'method' => 'get', 'action' => 'GameController@search'])}}
+                {{ Form::open([ 'method' => 'get', 'action' => 'TeamController@search'])}}
                     <table>
                         <tr>
-                            <td>{{ Form::label('from', 'From:') }}</td>
-                            <td>{{ Form::date('from', '', ['class' => 'form-control'.
-                            ($errors-> has('from') ? ' is-invalid' : '' )]) }}
-                            @if ($errors-> has('from'))
-                                <span class="invalid-feedback">
-                                <strong>{{ $errors->first('from') }}</strong>
-                                </span>
-                            @endif
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>{{ Form::label('to', 'To:') }}</td>
-                            <td>{{ Form::date('to', '', ['class' => 'form-control'.
-                            ($errors-> has('to') ? ' is-invalid' : '' )]) }}
-                            @if ($errors-> has('to'))
-                                <span class="invalid-feedback">
-                                <strong>{{ $errors->first('to') }}</strong>
-                                </span>
-                            @endif
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>{{ Form::label('Type', 'Game Type:') }}</td>
-                            <td>{{ Form::select('Type', array('0' => 'all','1' => 'regular game', '2' => 'play-off game'), '',['class' => 'form-control'.
-                            ($errors-> has('Type') ? ' is-invalid' : '' )]) }}
-                            @if ($errors-> has('Type'))
-                                <span class="invalid-feedback">
-                                <strong>{{ $errors->first('Type') }}</strong>
-                                </span>
-                            @endif
-                            </td>
-                        </tr>
-                        <tr>
                             <td>{{ Form::label('Team', 'Team:') }}</td>
-                            <td>{{ Form::select('Team', $teams, '',['class' => 'form-control'.
+                            <td>{{ Form::text('Team', '',['class' => 'form-control'.
                             ($errors-> has('Team') ? ' is-invalid' : '' )]) }}
-                            @if ($errors-> has('HomeTeam'))
+                            @if ($errors-> has('Team'))
                                 <span class="invalid-feedback">
-                                <strong>{{ $errors->first('HomeTeam') }}</strong>
+                                <strong>{{ $errors->first('Team') }}</strong>
                                 </span>
                             @endif
                             </td>
@@ -67,25 +34,35 @@
                 <?php
                     $leagues = App\League::all();
                 ?>
+                <?php $count=0 ?>
+                @foreach($teams as $team)
+                @if($team->league==NULL)
+                @if($count==0)
                 <h4>Teams with no league</h4>
                 <ul>
-                @foreach($teams as $team)
-                    @if($team->league==NULL)
+                <?php $count++; ?>
+                @endif
                     <li><a href='{{action('TeamController@show',$team->id)}}'>{{$team->teamName}}</a></li>
-                    @endif
+                @endif
                 @endforeach
+                @if($count!=0)
                 </ul>
-                <br>
+                @endif
                 @foreach($leagues as $league)
-                    <h4>{{$league->leagueName}}</h4>
-                    <ul>
+                    <?php $count=0 ?>
                     @foreach($teams as $team)
                     @if($team->league==$league->id)
-                    <li><a href='{{action('TeamController@show',$team->id)}}'>{{$team->teamName}}</a></li><br>
+                        @if($count==0)
+                        <h4>{{$league->leagueName}}</h4>
+                        <ul>
+                        <?php $count++; ?>
+                        @endif
+                        <li><a href='{{action('TeamController@show',$team->id)}}'>{{$team->teamName}}</a></li>
                     @endif
                     @endforeach
+                    @if($count!=0)
                     </ul>
-                    <br>
+                    @endif
                 @endforeach
             </div>
         </div>
