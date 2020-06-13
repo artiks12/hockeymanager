@@ -84,6 +84,7 @@
                         $visit = App\Team::where('id','=',$game->VisitingTeam)->first();
                     ?>
                     <tr onclick="location.href='{{url('home')}}'" style="cursor:pointer;">
+                        <td style='border:solid; border-width:1px; width:100px;'>@if($game->type==1) Regular Season @else Play-off @endif</td>
                         <td style='border:solid; border-width:1px; width:600px;'>{{$league->leagueName}} {{$season->seasonName}} - {{$game->date}} - {{$host->teamName}} vs {{$visit->teamName}}</td>
                         <td style='border:solid; border-width:1px; width:50px;'>@if($game->HomeScore!=NULL && $game->VisitorScore!=NULL){{$game->HomeScore}} : {{$game->VisitorScore}} @endif</td>
                     </tr>
