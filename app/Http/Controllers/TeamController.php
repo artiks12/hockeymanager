@@ -33,16 +33,29 @@ class TeamController extends Controller
         if(Team::where('id','=',$id)->exists())
         {
             $info = Team::where('id','=',$id)->first();
-            $teams = Team::where('season','=',$info->season)->get();
             $games = Game::where('HostTeam','=',$id)->orWhere('VisitingTeam','=',$id)->get();
             $nextGame = $games->where('season','=',$info->season)->where('HomeScore','=',NULL)->sortBy('id')->first();
+            if($nextGame->HostTeam==$info->id)
+            {
+                $opponent = Team::where('id','=',$nextGame->VisitingTeam)->first();
+            }
+            else
+            {
+                $opponent = Team::where('id','=',$nextGame->HostTeam)->first();
+            }
             $players = Player::all();
-            return view('myTeam',array('players' => $players, 'teams' => $teams, 'info' => $info, 'league' => 1, 'page' => $page, 'games' => $games, 'nextGame' => $nextGame));
+            return view('myTeam',array('players' => $players, 'opponent' => $opponent, 'info' => $info, 'league' => 1, 'page' => $page, 'games' => $games, 'nextGame' => $nextGame));
         }
         else
         {
             return view('myTeam', array('league' => 0));
         } 
+    }
+    public function search(Request $request)
+    {
+        $teams = Team::all()->sortBy('teamName');
+        if($request->Team!=NULL) {$teams = Team::where('teamName','LIKE', '%'.$request->Team.'%')->get();}
+        return view('teams', array('teams' => $teams));
     }
     public function create()
     {
