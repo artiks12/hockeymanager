@@ -210,7 +210,7 @@
                         <td style='border:solid; border-width:1px;'>{{$player->birthday}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->height}}</td>
                         <td style='border:solid; border-width:1px;'>{{$player->weight}}</td>
-                        <td style='border:solid; border-width:1px;'><div class="btn btn-secondary">Sign</div></td>
+                        <td style='border:solid; border-width:1px;'><div class="btn btn-secondary" onclick="location.href='{{url('players')}}'">Sign</div></td>
                     </tr>
                     @endif
                     @endforeach
