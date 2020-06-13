@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Game extends Model
 {
-    protected $dates = ['date'];
+    protected $fillable = [
+        'date', 'HostTeam', 'VisitingTeam', 'type'
+    ];
     public function season() 
     {
         return $this->belongsTo('App\Season'); 
