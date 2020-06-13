@@ -33,12 +33,18 @@ Route::get('league={id}/options', 'SeasonController@options');
 Route::get('/leagues={leagueId}/season={seasonId}', 'LeagueController@season');
 
 Route::get('teams', 'TeamController@index');
+Route::get('teams/search', 'TeamController@search');
 Route::get('team={id}/page={page?}', 'TeamController@menu');
+Route::get('team={id}/sign={player}', 'PlayerController@sign');
+Route::get('player={id}/release', 'PlayerController@release');
+Route::post('player={id}/team={team}/signed', 'PlayerController@get');
 Route::post('teams', 'TeamController@store');
 Route::get('teams={id}', 'TeamController@show');
 
 
 Route::get('players', 'PlayerController@index');
+Route::get('players={id}', 'PlayerController@show');
+Route::get('players={id}/season={season}', 'PlayerController@byGame');
 
 Route::get('games', 'GameController@index');
 Route::get('games/search', 'GameController@search');
