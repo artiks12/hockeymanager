@@ -25,6 +25,8 @@ class CreatePlayersTable extends Migration
             $table->bigInteger('team')->unsigned()->nullable();
             $table->integer('number')->nullable();
             $table->foreign('team')->references('id')->on('teams');
+            $table->decimal('Cap')->nullable();
+            $table->integer('Years')->unsigned()->nullable();
         });
     }
 
