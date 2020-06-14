@@ -15,7 +15,7 @@
 <div class="row justify-content-center" style='margin-top:30px;'>
     <div class="col-md-4">
         <div class="card">
-            <div class="card-header">Menu for {{$season->seasonName}} season</div>
+            <div class="card-header">Menu @if($season!=NULL) for {{$season->seasonName}} season @endif</div>
             <div class="card-body">
                 <p><a class="btn btn-primary @if($page=='home') active @endif" style='width:100%;' href='{{url('team='.$info->id.'/page=home')}}'>Home</a></p>
                 <p><a class="btn btn-primary @if($page=='roster') active @endif" style='width:100%;' href='{{url('team='.$info->id.'/page=roster')}}'>Team Roster</a></p>
@@ -33,7 +33,36 @@
             <div class="card-header">{{$info->teamName}}</div>
 
             <div class="card-body">
-                Next game:<a href=''> @if($info->id==$nextGame->HostTeam)Hosting @else At @endif {{$opponent->teamName}} on {{$nextGame->date}}</a>
+                @if($nextGame)
+                Next game:<a href='{{url('games='.$nextGame->id.'/log')}}'> @if($info->id==$nextGame->HostTeam)Hosting @else At @endif {{$opponent->teamName}} on {{$nextGame->date}}</a>
+                <br> <a href='{{url('games='.$nextGame->id.'/roster')}}'> Upload Roster</a>
+                @endif
+                @if($info->statistician==NULL)
+                <?php 
+                    $user = App\User::where('role','=',3)->pluck('name','id');
+                ?>
+                <p>
+                <h4>Add a Statistician</h4>
+                    @if(count($user)>0)
+                    <table>
+                    {{ Form::open([ 'method' => 'post' , 'action' => ['TeamController@statistician',$info->id]])}}
+                    <tr>
+                        <td>{{ Form::label('statistician', 'Statistician:') }}</td>
+                        <td>{{ Form::select('statistician', $user, ['class' => 'form-control'.
+                        ($errors-> has('statistician') ? ' is-invalid' : '' )]) }}
+                        @if ($errors-> has('statistician'))
+                            <span class="invalid-feedback">
+                            <strong>{{ $errors->first('statistician') }}</strong>
+                            </span>
+                        @endif
+                        </td>
+                    </tr>
+                    </table>
+                    {{ Form::submit('Add') }}
+                    {{ Form::close() }}
+                    @endif
+                </p>
+                @endif
             </div>
         </div>
     </div>
@@ -255,7 +284,7 @@
                         $visit = App\Team::where('id','=',$game->VisitingTeam)->first();
                     ?>
                 @if($game->season==$info->season && $game->type==1)
-                    <tr onclick="location.href='{{url('home')}}'" style="cursor:pointer;">
+                    <tr onclick="location.href='{{url('games='.$game->id.'/log')}}'" style="cursor:pointer;">
                         <td style='border:solid; border-width:1px; width:600px;'>{{$league->leagueName}} {{$season->seasonName}} - {{$game->date}} - {{$host->teamName}} vs {{$visit->teamName}}</td>
                         <td style='border:solid; border-width:1px; width:50px;'>@if($game->HomeScore!=NULL && $game->VisitorScore!=NULL){{$game->HomeScore}} : {{$game->VisitorScore}} @endif</td>
                     </tr>
@@ -272,7 +301,7 @@
                         $visit = App\Team::where('id','=',$game->VisitingTeam)->first();
                     ?>
                 @if($game->season==$info->season && $game->type==2)
-                    <tr onclick="location.href='{{url('home')}}'" style="cursor:pointer;">
+                    <tr onclick="location.href='{{url('games='.$game->id.'/log')}}'" style="cursor:pointer;">
                         <td style='border:solid; border-width:1px; width:600px;'>{{$league->leagueName}} {{$season->seasonName}} - {{$game->date}} - {{$host->teamName}} vs {{$visit->teamName}}</td>
                         <td style='border:solid; border-width:1px; width:50px;'>@if($game->HomeScore!=NULL && $game->VisitorScore!=NULL){{$game->HomeScore}} : {{$game->VisitorScore}} @endif</td>
                     </tr>
