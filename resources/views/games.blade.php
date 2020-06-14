@@ -10,23 +10,12 @@
                 {{ Form::open([ 'method' => 'get', 'action' => 'GameController@search'])}}
                     <table>
                         <tr>
-                            <td>{{ Form::label('from', 'From:') }}</td>
-                            <td>{{ Form::date('from', '', ['class' => 'form-control'.
-                            ($errors-> has('from') ? ' is-invalid' : '' )]) }}
-                            @if ($errors-> has('from'))
+                            <td>{{ Form::label('date', 'From:') }}</td>
+                            <td>{{ Form::date('date', '', ['class' => 'form-control'.
+                            ($errors-> has('date') ? ' is-invalid' : '' )]) }}
+                            @if ($errors-> has('date'))
                                 <span class="invalid-feedback">
-                                <strong>{{ $errors->first('from') }}</strong>
-                                </span>
-                            @endif
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>{{ Form::label('to', 'To:') }}</td>
-                            <td>{{ Form::date('to', '', ['class' => 'form-control'.
-                            ($errors-> has('to') ? ' is-invalid' : '' )]) }}
-                            @if ($errors-> has('to'))
-                                <span class="invalid-feedback">
-                                <strong>{{ $errors->first('to') }}</strong>
+                                <strong>{{ $errors->first('date') }}</strong>
                                 </span>
                             @endif
                             </td>
@@ -83,11 +72,13 @@
                         $host = App\Team::where('id','=',$game->HostTeam)->first();
                         $visit = App\Team::where('id','=',$game->VisitingTeam)->first();
                     ?>
-                    <tr onclick="location.href='{{url('home')}}'" style="cursor:pointer;">
+                    @if(date('Y-m-d', strtotime($game->date))==date('Y-m-d', strtotime($date)))
+                    <tr onclick="location.href='{{url('games='.$game->id.'/log')}}'" style="cursor:pointer;">
                         <td style='border:solid; border-width:1px; width:100px;'>@if($game->type==1) Regular Season @else Play-off @endif</td>
                         <td style='border:solid; border-width:1px; width:600px;'>{{$league->leagueName}} {{$season->seasonName}} - {{$game->date}} - {{$host->teamName}} vs {{$visit->teamName}}</td>
                         <td style='border:solid; border-width:1px; width:50px;'>@if($game->HomeScore!=NULL && $game->VisitorScore!=NULL){{$game->HomeScore}} : {{$game->VisitorScore}} @endif</td>
                     </tr>
+                    @endif
                     @endforeach
                 </table> 
             </div>
