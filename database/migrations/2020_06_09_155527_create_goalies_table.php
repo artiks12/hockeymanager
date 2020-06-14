@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGoalieStatsTable extends Migration
+class CreateGoaliesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,16 @@ class CreateGoalieStatsTable extends Migration
      */
     public function up()
     {
-        Schema::create('goalie_stats', function (Blueprint $table) {
+        Schema::create('goalies', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->foreignId('player')->constrained();
+            $table->foreignId('season')->constrained();
+            $table->foreignId('team')->constrained();
             $table->foreignId('game')->constrained();
             $table->integer('games');
+            $table->integer('wins');
+            $table->integer('loses');
             $table->integer('SOG');
             $table->integer('GA');
             $table->integer('seconds');
@@ -36,6 +40,6 @@ class CreateGoalieStatsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('goalie_stats');
+        Schema::dropIfExists('goalies');
     }
 }
