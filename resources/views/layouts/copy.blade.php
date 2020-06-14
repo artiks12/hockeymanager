@@ -62,19 +62,31 @@
                         @if ( !Auth::guest())
                             <?php 
                                 $user = Auth::user();
-                                $team = App\Team::where('manager','=',$user->id)->first();
-                                $page = 'home';
                             ?>
                             @if($user->role==1)
-                            <?php 
-                                $league = App\League::where('commisioner','=',$user->id)->first();
-                            ?>
-                            <li><a class="nav-link" href="{{ action('LeagueController@menu',$league->id) }}">My League</a></li>
-                            <li><a class="nav-link" href="{{ url('team='.$team->id.'/page='.$page) }}">My Team</a></li>
+                            <li><a class="nav-link" href="{{ url('league') }}">My League</a></li>
+                            <li><a class="nav-link" href="{{ url('team') }}">My Team</a></li>
                             @endif
                             @if($user->role==2)
-                            <li><a class="nav-link" href="{{ url('team='.$team->id.'/page='.$page) }}">My Team</a></li>
+                            <li><a class="nav-link" href="{{ url('team') }}">My Team</a></li>
                             @endif
+                            @if($user->role==3)
+                            <?php 
+                                $team = App\Team::where('statistician','=',$user->id)->first();
+                            ?>
+                            @if($team)
+                            <?php 
+                                $game = App\Game::where('VisitingTeam','=',$team->id)->orWhere('HostTeam','=',$team->id)->get();
+                                $game = $game->where('HomeScore','=',NULL)->first();
+                            ?>
+                            @if($game)
+                            <li><a class="nav-link" href='{{url('games='.$game->id.'/update')}}'>Next Game</a></li>
+                            @endif
+                            @endif
+                            @endif 
+                            @if($user->role==4)
+                            <li><a class="nav-link" href="/admin/menu">Admin</a></li>
+                            @endif 
                         @endif
                     </ul>
 
@@ -133,41 +145,69 @@
                                                 $datebegin = date('Y-m-d 06:00:00');
                                                 $dateend = date('Y-m-d 06:00:00',strtotime('+1 day'));
                                             }
-                                            $games = App\Game::where('date','>=',strtotime($datebegin))->where('date','<',strtotime($dateend))->get();
+                                            $games = App\Game::all();
+                                            $date = date('Y-m-d H:i:s');
+                                            $counter = 0;
                                         ?>
                                         @if($games->count()>0)
                                         @foreach($games as $game)
+                                        @if(strtotime($game->date)>=strtotime($datebegin) && strtotime($game->date)< strtotime($dateend))
                                         <?php 
                                             $season = App\Season::where('id','=',$game->season)->first();
                                             $leagues = App\League::where('id','=',$season->league)->first();
                                             $host = App\Team::where('id','=',$game->HostTeam)->first();
                                             $visit = App\Team::where('id','=',$game->VisitingTeam)->first();
+                                            if($counter==0) $counter++;
                                         ?>
                                         <div class="game" style="display:inline-block; float:none; margin:0 auto;">
                                             <div class="card">
-                                                <div class="card-header" style='@if($game->HomeScore!=NULL && $game->VisitorScore!=NULL)background-color:lime;@endif'>{{$leagues->leagueName}} {{$season->seasonName}}</div>
-                                                <a href='livani.lv' class="card-body">
+                                                <div class="card-header" style='@if($game->HomeScore!=NULL || $game->VisitorScore!=NULL)background-color:lime; @elseif(strtotime($game->date)<strtotime($date)) background-color:red;@endif'>{{$leagues->leagueName}} {{$season->seasonName}}<br> {{$game->date}}</div>
+                                                <a href='{{url('games='.$game->id.'/log')}}' class="card-body">
                                                     <div class="row">
                                                         <div class="col-team" id='HomeTeam'>
                                                             {{$host->teamName}}
                                                         </div>
-                                                        <div class="col-score" id='VisitTeam'>
-                                                            @if($game->HomeScore!=NULL) {{$game->HomeScore}} @endif
+                                                        <div class="col-score" id='HomeScore'>
+                                                            @if($game->HomeScore!=NULL) {{$game->HomeScore}} 
+                                                            @elseif(strtotime($game->date)< strtotime($date))
+                                                            <?php 
+                                                                $goals=0;
+                                                                $log = App\Goal::where('game','=',$game->id);
+                                                                foreach($log as $goal)
+                                                                {
+                                                                    if($goal->team==$game->HostTeam) $goals++;
+                                                                }
+                                                            ?>
+                                                            {{$goals}}
+                                                            @endif
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-team" id='HomeScore'>
+                                                        <div class="col-team" id='VisitTeam'>
                                                             {{$visit->teamName}}
                                                         </div>
                                                         <div class="col-score" id='VisitScore'>
-                                                            @if($game->VisitorScore!=NULL) {{$game->VisitorScore}} @endif
+                                                            @if($game->VisitorScore!=NULL) {{$game->VisitorScore}}
+                                                            @elseif(strtotime($game->date)< strtotime($date))
+                                                            <?php 
+                                                                $goals=0;
+                                                                $log = App\Goal::where('game','=',$game->id);
+                                                                foreach($log as $goal)
+                                                                {
+                                                                    if($goal->team==$game->HostTeam) $goals++;
+                                                                }
+                                                            ?>
+                                                            {{$goals}}
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </a>
                                             </div>
                                         </div>
+                                        @endif
                                         @endforeach
-                                        @else
+                                        @endif
+                                        @if($counter==0)
                                         There are no games today.
                                         @endif
                                     </div>
