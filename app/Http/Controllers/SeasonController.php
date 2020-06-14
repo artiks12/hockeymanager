@@ -20,7 +20,7 @@ class SeasonController extends Controller
 
     public function options($id)
     {
-        $info = League::where('commisioner','=',$id)->first();
+        $info = League::where('id','=',$id)->first();
         return view('options',array('info' => $info, 'league' => 1, 'id' => $id));
     }
     /**
