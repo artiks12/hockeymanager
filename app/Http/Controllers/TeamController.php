@@ -22,7 +22,19 @@ class TeamController extends Controller
         $teams = Team::all()->sortBy('teamName');
         return view('teams',array('teams' => $teams));
     }
-
+    public function begin()
+    {
+        $user = auth()->user();
+        if(Team::where('manager','=',$user->id)->exists()) 
+        {
+            $team = Team::where('manager','=',$user->id)->first();
+            return redirect('team='.$team->id.'/page=home');
+        }
+        else
+        {
+            return view('myTeam', array('league' => 0));
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -30,10 +42,11 @@ class TeamController extends Controller
      */
     public function menu($id, $page = 'home')
     {
-        if(Team::where('id','=',$id)->exists())
+        $info = Team::where('id','=',$id)->first();
+        $games = Game::where('HostTeam','=',$id)->orWhere('VisitingTeam','=',$id)->get();
+        $players = Player::all();
+        if(count($games)>0)
         {
-            $info = Team::where('id','=',$id)->first();
-            $games = Game::where('HostTeam','=',$id)->orWhere('VisitingTeam','=',$id)->get();
             $nextGame = $games->where('season','=',$info->season)->where('HomeScore','=',NULL)->sortBy('id')->first();
             if($nextGame->HostTeam==$info->id)
             {
@@ -43,13 +56,9 @@ class TeamController extends Controller
             {
                 $opponent = Team::where('id','=',$nextGame->HostTeam)->first();
             }
-            $players = Player::all();
             return view('myTeam',array('players' => $players, 'opponent' => $opponent, 'info' => $info, 'league' => 1, 'page' => $page, 'games' => $games, 'nextGame' => $nextGame));
         }
-        else
-        {
-            return view('myTeam', array('league' => 0));
-        } 
+        return view('myTeam',array('nextGame' => NULL,'players' => $players, 'info' => $info, 'league' => 1, 'page' => $page, 'games' => $games));
     }
     public function search(Request $request)
     {
@@ -84,7 +93,8 @@ class TeamController extends Controller
             $team->league=$league->id;
         }
         $team->save();
-        return redirect('teams');
+        $temp = Team::where('manager','=',$user->id)->first();
+        return redirect('team='.$temp->id.'/page=home');
     }
 
     /**
@@ -93,10 +103,20 @@ class TeamController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function statistician(Request $request, $id)
     {
         $team = Team::where('id','=',$id)->first();
-        return view('teamView',array('team' => $team));
+        $team->statistician = $request->statistician;
+        $team->save();
+        return redirect('team='.$id.'/page=home');
+    }
+    public function show($id,$page)
+    {
+        $team = Team::where('id','=',$id)->first();
+        $players = Player::where('team','=',$id)->get();
+        $field = Field::all();
+        $goalie = Goalie::all();
+        return view('teamView',array('info' => $team, 'players' => $players, 'field' => $field, 'goalie' => $goalie, 'page' => $page));
     }
 
     /**
