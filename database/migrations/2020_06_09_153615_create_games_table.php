@@ -17,6 +17,8 @@ class CreateGamesTable extends Migration
         Schema::create('games', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->bigInteger('league')->unsigned()->nullable();
+            $table->foreign('league')->references('id')->on('leagues');
             $table->foreignId('season')->constrained();
             $table->timestamp('date');
             $table->bigInteger('HostTeam')->unsigned();
@@ -25,6 +27,7 @@ class CreateGamesTable extends Migration
             $table->bigInteger('VisitingTeam')->unsigned();
             $table->foreign('HostTeam')->references('id')->on('teams');
             $table->foreign('VisitingTeam')->references('id')->on('teams');
+            $table->integer('type');
         });
         Schema::enableForeignKeyConstraints();
     }
