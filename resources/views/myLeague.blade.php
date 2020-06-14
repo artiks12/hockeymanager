@@ -11,24 +11,6 @@
     $id = $user['id'];
 ?>
 
-@if($league==1)
-@section('content')
-<div class="row justify-content-center" style='margin-top:30px;'>
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <div class="leagueName" style="display:inline;">{{$info->leagueName}}</div>
-            </div>
-            <div class="card-body">
-                <div class="makeSeason"><a href="{{ action('LeagueController@new',$id) }}">Make a New Season</a></div>
-                <div class="addTeam"><a href="{{ action('LeagueController@add',$id) }}">Add Teams To League</a></div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
-
-@elseif($league==0)
 @section('content')
 <div class="row justify-content-center" style='margin-top:30px;'>
     <div class="col-md-12">
@@ -61,5 +43,3 @@
     </div>
 </div>
 @endsection
-@endif
-<!--if(league==2) BEGINS-->
