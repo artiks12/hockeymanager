@@ -42,7 +42,7 @@
                 <ul>
                 <?php $count++; ?>
                 @endif
-                    <li><a href='{{action('TeamController@show',$team->id)}}'>{{$team->teamName}}</a></li>
+                    <li><a href='{{url('teams='.$team->id.'/page=roster')}}'>{{$team->teamName}}</a></li>
                 @endif
                 @endforeach
                 @if($count!=0)
@@ -57,7 +57,7 @@
                         <ul>
                         <?php $count++; ?>
                         @endif
-                        <li><a href='{{action('TeamController@show',$team->id)}}'>{{$team->teamName}}</a></li>
+                        <li><a href='{{url('teams='.$team->id.'/page=roster')}}'>{{$team->teamName}}</a></li>
                     @endif
                     @endforeach
                     @if($count!=0)
