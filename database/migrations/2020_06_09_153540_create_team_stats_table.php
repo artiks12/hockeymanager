@@ -20,8 +20,11 @@ class CreateTeamStatsTable extends Migration
             $table->foreignId('team')->constrained();
             $table->integer('victories');
             $table->integer('defeats');
+            $table->integer('overtimes');
+            $table->integer('points');
             $table->integer('scoredGoals');
             $table->integer('goalsAgainst');
+            $table->integer('goalDifference');
         });
     }
 
