@@ -18,6 +18,8 @@ Route::get('/', function () {
 });
 
 Route::get('leagues', 'LeagueController@index');
+Route::get('league', 'LeagueController@begin');
+Route::get('team', 'TeamController@begin');
 Route::get('league={id}', 'LeagueController@menu');
 Route::post('import', 'LeagueController@import');
 Route::post('season', 'LeagueController@seasonCreate');
@@ -29,25 +31,34 @@ Route::post('leagues', 'LeagueController@store');
 Route::get('leagues={id}', 'LeagueController@show');
 
 Route::get('league={id}/options', 'SeasonController@options');
+Route::get('league={id}/addPlayer', 'PlayerController@create');
+Route::post('newPlayer', 'PlayerController@store');
 
 Route::get('/leagues={leagueId}/season={seasonId}', 'LeagueController@season');
 
 Route::get('teams', 'TeamController@index');
 Route::get('teams/search', 'TeamController@search');
-Route::get('team={id}/page={page?}', 'TeamController@menu');
+Route::get('team={id}/page={page}', 'TeamController@menu');
+Route::post('team={id}/statistician', 'TeamController@statistician');
 Route::get('team={id}/sign={player}', 'PlayerController@sign');
 Route::get('player={id}/release', 'PlayerController@release');
 Route::post('player={id}/team={team}/signed', 'PlayerController@get');
 Route::post('teams', 'TeamController@store');
-Route::get('teams={id}', 'TeamController@show');
+Route::get('teams={id}/page={page}', 'TeamController@show');
 
 
 Route::get('players', 'PlayerController@index');
+Route::get('players/search', 'PlayerController@search');
 Route::get('players={id}', 'PlayerController@show');
 Route::get('players={id}/season={season}', 'PlayerController@byGame');
 
 Route::get('games', 'GameController@index');
+Route::get('games={id}/{page}', 'GameController@show');
 Route::get('games/search', 'GameController@search');
+Route::post('game={game}/team={team}/rosterupdate', 'GameController@roster');
+
+Route::get('admin/{page}','AdminController@index');
+Route::delete('admin/removeUser','AdminController@user');
 
 Auth::routes();
 
