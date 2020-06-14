@@ -1,0 +1,123 @@
+@extends('layouts.copy')
+<?php 
+    $user = Auth::user();
+    $id = $user['id'];
+?>
+<style>
+    div.games
+    {
+        display:none;
+    }
+</style>
+@if($statuss==1)
+@section('content')
+<div class="row justify-content-center" style='margin-top:30px;'>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="leagueName">Add Games</div>
+            </div>
+            <div class="card-body">
+                {{ Form::open([ 'method' => 'post' , 'action' => 'PlayerController@store'])}}
+                    <table>
+                        <tr>
+                            <td>{{ Form::label('Name', 'Name:') }}</td>
+                            <td>{{ Form::text('Name', '',['class' => 'form-control'.
+                            ($errors-> has('Name') ? ' is-invalid' : '' )]) }}
+                            @if ($errors-> has('Name'))
+                                <span class="invalid-feedback">
+                                <strong>{{ $errors->first('Name') }}</strong>
+                                </span>
+                            @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ Form::label('Surname', 'Surname:') }}</td>
+                            <td>{{ Form::text('Surname', '',['class' => 'form-control'.
+                            ($errors-> has('Surname') ? ' is-invalid' : '' )]) }}
+                            @if ($errors-> has('Surname'))
+                                <span class="invalid-feedback">
+                                <strong>{{ $errors->first('Surname') }}</strong>
+                                </span>
+                            @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ Form::label('date', 'Birthday:') }}</td>
+                            <td>{{ Form::date('date', '', ['class' => 'form-control'.
+                            ($errors-> has('date') ? ' is-invalid' : '' )]) }}
+                            @if ($errors-> has('date'))
+                                <span class="invalid-feedback">
+                                <strong>{{ $errors->first('date') }}</strong>
+                                </span>
+                            @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ Form::label('height', 'Height:') }}</td>
+                            <td>{{ Form::number('height', '',['class' => 'form-control'.
+                            ($errors-> has('height') ? ' is-invalid' : '' )]) }}
+                            @if ($errors-> has('height'))
+                                <span class="invalid-feedback">
+                                <strong>{{ $errors->first('height') }}</strong>
+                                </span>
+                            @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ Form::label('weight', 'Weight:') }}</td>
+                            <td>{{ Form::number('weight', '',['class' => 'form-control'.
+                            ($errors-> has('weight') ? ' is-invalid' : '' )]) }}
+                            @if ($errors-> has('weight'))
+                                <span class="invalid-feedback">
+                                <strong>{{ $errors->first('weight') }}</strong>
+                                </span>
+                            @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ Form::label('Position', 'Position:') }}</td>
+                            <td>{{ Form::select('Position', array('G' => 'Goalie', 'D' => 'Defenceman', 'F' => 'Forward'), old('Position'),['class' => 'form-control'.
+                            ($errors-> has('Position') ? ' is-invalid' : '' )]) }}
+                            @if ($errors-> has('Position'))
+                                <span class="invalid-feedback">
+                                <strong>{{ $errors->first('Position') }}</strong>
+                                </span>
+                            @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ Form::label('Team', 'Team:') }}</td>
+                            <td>{{ Form::select('Team', $teams, '',['class' => 'form-control'.
+                            ($errors-> has('Team') ? ' is-invalid' : '' )]) }}
+                            @if ($errors-> has('Team'))
+                                <span class="invalid-feedback">
+                                <strong>{{ $errors->first('Team') }}</strong>
+                                </span>
+                            @endif
+                            </td>
+                        </tr>
+                    </table>
+                {{ Form::submit('Add') }}
+                {{ Form::close() }}
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+@else
+@section('content')
+<div class="row justify-content-center" style='margin-top:30px;'>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="leagueName">Add Games</div>
+            </div>
+            <div class="card-body">
+                There are no teams in the league to add players to
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+@endif
