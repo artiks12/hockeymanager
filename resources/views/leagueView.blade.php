@@ -1,11 +1,17 @@
 @extends('layouts.copy')
 
 @section('content')
-<?php 
-    $user = Auth::user()->toArray();
-    $statemet = $user['id']==$league['id'];
+<?php
+$leagueId=0;
+foreach($seasons as $season)
+{
+    $league=App\League::where('id','=',$season->league)->first();
     $leagueId=$league->id;
+    break;
+}
+    
 ?>
+
 <div class="row justify-content-center" style='margin-top:30px;'>
     <div class="col-md-8">
         <div class="card">
