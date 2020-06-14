@@ -1,8 +1,3 @@
-<?php 
-    $user = Auth::user()->toArray();
-    $id = $user['id'];
-    $checkS = App\Season::where('league','=',$info->id)->orderBy('id','desc')->first();
-?>
 @extends('layouts.copy')
 
 @section('content')
@@ -11,8 +6,10 @@
         <div class="card">
             <div class="card-header">
                 <div class="leagueName" style="display:inline;">{{$info->leagueName}} {{$season->seasonName}}</div>
-                @if($info->commisioner==$id && $season->id == $checkS->id)
-                <div class="makeSeason" style="float:right; display:inline;"><a href="{{action('SeasonController@options',$id)}}">Options</a></div>
+                @if(!Auth::guest())
+                @if($info->commisioner==$user->id && $season->id == $season->id)
+                <div class="makeSeason" style="float:right; display:inline;"><a href="{{action('SeasonController@options',$info->id)}}">Options</a></div>
+                @endif
                 @endif
             </div>
             <div class="card-body">
@@ -54,5 +51,3 @@
     </div>
 </div>
 @endsection
-
-
