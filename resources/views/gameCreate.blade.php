@@ -3,6 +3,7 @@
     $user = Auth::user()->toArray();
     $id = $user['id'];
 ?>
+@if($statuss==1)
 @section('content')
 <div class="row justify-content-center" style='margin-top:30px;'>
     <div class="col-md-12">
@@ -76,3 +77,19 @@
     </div>
 </div>
 @endsection
+@else
+@section('content')
+<div class="row justify-content-center" style='margin-top:30px;'>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="leagueName">Add Games</div>
+            </div>
+            <div class="card-body">
+                There is no season to add games to
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+@endif
