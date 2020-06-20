@@ -13,6 +13,7 @@ use App\Goal;
 use App\Goalie;
 use App\Field;
 use App\Player;
+use App\TeamStat;
 
 class GameController extends Controller
 {
@@ -92,7 +93,7 @@ class GameController extends Controller
         $game->date = $combinedDT;
         $game->league = $league->id;
         $game->save();
-        return redirect('leagues');
+        return redirect('league='.$league->id.'/options');
     }
     public function roster(Request $request, $game, $team)
     {
@@ -173,6 +174,107 @@ class GameController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function addGoal(Request $request, $game, $team)
+    {
+        $time = 0;
+        $goalLatest = Goal::where('game','=',$game)->cursor('second','desc')->first();
+        $penaltyLatest = Penalty::where('game','=',$game)->cursor('second','desc')->first();
+        if($goalLatest!=NULL && $penaltyLatest!=NULL)
+        {
+            if($goalLatest>$penaltyLatest){$time=$goalLatest->second;}
+            else{$time=$penaltyLatest->second;}
+        }
+        elseif($goalLatest!=NULL){$time=$goalLatest->second;}
+        elseif($penaltyLatest!=NULL){$time=$penaltyLatest->second;}
+        $rules = array(
+            'time1' => 'required|integer|gte:'.$time,
+        );   
+        $this->validate($request, $rules);
+        $new = new Goal();
+        $new->game = $game;
+        $new->team = $team;
+        $new->scorer = $request->scorrer;
+        if($request->assist1!=0)$new->assist_1 = $request->assist1;
+        if($request->assist2!=0)$new->assist_2 = $request->assist2;
+        if($request->goalie!=0)$new->goalie = $request->goalie;
+        $new->second = $request->time1;
+        $new->save();
+        return redirect('games='.$game.'/update');
+    }
+    public function addPenalty(Request $request, $game, $team)
+    {
+        $time = 0;
+        $goalLatest = Goal::where('game','=',$game)->cursor('second','desc')->first();
+        $penaltyLatest = Penalty::where('game','=',$game)->cursor('second','desc')->first();
+        if($goalLatest!=NULL && $penaltyLatest!=NULL)
+        {
+            if($goalLatest>$penaltyLatest){$time=$goalLatest->second;}
+            else{$time=$penaltyLatest->second;}
+        }
+        elseif($goalLatest!=NULL){$time=$goalLatest->second;}
+        elseif($penaltyLatest!=NULL){$time=$penaltyLatest->second;}
+        $rules = array(
+            'time2' => 'required|integer|gte:'.$time,
+            'minutes' => 'required|integer|gt:0',
+            'reason' => 'required',
+        );   
+        $this->validate($request, $rules);
+        $new = new Penalty();
+        $new->game = $game;
+        $new->team = $team;
+        $new->player = $request->player;
+        $new->minutes = $request->minutes;
+        $new->reason = $request->reason;
+        $new->second = $request->time2;
+        $new->save();
+        return redirect('games='.$game.'/update');
+    }
+    public function finish($game)
+    {
+        $final = Game::where('id','=',$game)->first();
+        if($final->HomeScore!=NULL || $final->VisitorScore!=NULL)
+        {
+            return redirect ('games='.$game.'/update');
+        }
+        $goals = Goal::where('game','=',$game)->cursor('second','desc');
+        $Home = TeamStat::where('team','=',$final->HostTeam)->first();
+        $Visit = TeamStat::where('team','=',$final->VisitingTeam)->first();
+        $homescore = 0;
+        $visitscore = 0;
+        $ot = 0;
+        foreach($goals as $goal)
+        {
+            if($goal->second>3600){$ot = 1;}
+            if($goal->team==$Home->team){$homescore++;}
+            else{$visitscore++;}
+        }
+        if($homescore>$visitscore)
+        {
+            $Home->victories++;
+            $Home->points+=2;
+            if($ot==1){$Visit->overtimes++;$Visit->points++;}
+            else{$Visit->defeats++;}
+        }
+        else
+        {
+            $Visit->victories++;
+            $Visit->points+=2;
+            if($ot==1){$Home->overtimes++;$Home->points++;}
+            else{$Home->defeats++;}
+        }
+        $Home->scoredGoals+=$homescore;
+        $Home->goalsAgainst+=$visitscore;
+        $Home->goalDifference=$Home->scoredGoals-$Home->goalsAgainst;
+        $Visit->goalsAgainst+=$homescore;
+        $Visit->scoredGoals+=$visitscore;
+        $Visit->goalDifference=$Visit->scoredGoals-$Visit->goalsAgainst;
+        $Visit->save();
+        $Home->save();
+        $final->HomeScore=$homescore;
+        $final->VisitorScore=$visitscore;
+        $final->save();
+        return redirect ('games='.$game.'/update');
+    }
     public function show($id,$page)
     {
         $game = Game::where('id','=',$id)->first();
@@ -222,9 +324,70 @@ class GameController extends Controller
         if($page=='roster')
         {
             $user = auth()->user();
-            $team = Team::where('manager','=',$user->id)->first();
-            $roster = Player::where('team','=',$team->id)->get();
-            return view('gameView',array('team' => $team,'roster' => $roster,'events' => 0 ,'hostGoals' => $HostGoals,'visitGoals' => $VisitGoals,'overtime' => $overtime,'game' => $game,'host' => $host,'visit' => $visit,'page' => $page,'goals' => $goals,'penalties' => $penalties));
+            if($user)
+            {
+                if($user->id == $host->manager || $user->id == $visit->manager)
+                {
+                    $team = Team::where('manager','=',$user->id)->first();
+                    if(Goalie::where('game','=',$id)->exists())
+                    {
+                        return redirect('games='.$id.'/log');
+                    }
+                    $recent = Game::where('HostTeam','=',$team->id)->orWhere('VisitingTeam','=',$team->id)->get();
+                    $recent = $recent->where('HomeScore','=',NULL)->where('VisitorScore','=',NULL)->first();
+                    if($recent)
+                    {
+                        if($recent->id == $id)
+                        {
+                            $roster = Player::where('team','=',$team->id)->get();
+                            return view('gameView',array('team' => $team,'roster' => $roster,'events' => 0 ,'hostGoals' => $HostGoals,'visitGoals' => $VisitGoals,'overtime' => $overtime,'game' => $game,'host' => $host,'visit' => $visit,'page' => $page,'goals' => $goals,'penalties' => $penalties));
+                        }
+                        return redirect('games='.$id.'/log');
+                    }
+                    return redirect('games='.$id.'/log');
+                }
+                else
+                {
+                    return redirect('games='.$id.'/log');
+                }
+            }
+            else
+            {
+                return redirect('games='.$id.'/log');
+            }
+        }
+        if($page=='update')
+        {
+            $user = auth()->user();
+            if($user)
+            {
+                if($user->role==3)
+                {
+                    if($host->statistician == $user->id || $visit->statistician == $user->id)
+                    {
+                        $team = Team::where('statistician','=',$user->id)->first();
+                        if($team->id==$game->HostTeam){$opponent= Team::where('id','=',$game->VisitingTeam)->first();}
+                        else{$opponent=Team::where('id','=',$game->HostTeam)->first();}
+                        $roster = Player::where('team','=',$team->id)->get();
+                        $goalies = Goalie::where('game','=',$game->id)->where('team','=',$team->id)->get();
+                        $against = Goalie::where('game','=',$game->id)->where('team','=',$opponent->id)->get();
+                        $players = Field::where('game','=',$game->id)->where('team','=',$team->id)->get();
+                        return view('gameView',array('goalies' => $goalies,'against' => $against,'players' => $players,'opponent' => $opponent,'team' => $team,'roster' => $roster,'events' => 0 ,'hostGoals' => $HostGoals,'visitGoals' => $VisitGoals,'overtime' => $overtime,'game' => $game,'host' => $host,'visit' => $visit,'page' => $page,'goals' => $goals,'penalties' => $penalties));
+                    }
+                    else
+                    {
+                        return redirect('games='.$id.'/log');
+                    }
+                }
+                else
+                {
+                    return redirect('games='.$id.'/log');
+                }
+            }
+            else
+            {
+                return redirect('games='.$id.'/log');
+            }
         }
         if(count($goals)>0  && count($penalties)>0)
         {
@@ -302,6 +465,67 @@ class GameController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function updateGoalie(Request $request, $game, $team, $player)
+    {
+        $temp=Player::where('id','=',$player)->first();
+        
+        $number = $temp->number;
+        $games=$number.'games';
+        $wins=$number.'wins';
+        $loses=$number.'loses';
+        $shots=$number.'SOG';
+        $allowed=$number.'GA';
+        $seconds=$number.'Seconds';
+        $shutouts=$number.'Shutouts';
+        $goals=$number.'Goals';
+        $assists=$number.'Assists';
+        $penalties=$number.'PIM';
+        
+        $goalie = Goalie::where('player','=',$player)->where('game','=',$game)->first();
+        $goalie->games = $request->$games;
+        $goalie->wins = $request->$wins;
+        $goalie->loses = $request->$loses;
+        $goalie->SOG = $request->$shots;
+        $goalie->GA = $request->$allowed;
+        $goalie->seconds = $request->$seconds;
+        $goalie->shutouts = $request->$shutouts;
+        $goalie->Goals = $request->$goals;
+        $goalie->Assists = $request->$assists;
+        $goalie->PIM = $request->$penalties;
+        $goalie->is_set = 1;
+        $goalie->save();
+        return redirect('games='.$game.'/update');
+    }
+    
+    public function updateField(Request $request, $game, $team, $player)
+    {
+        $temp=Player::where('id','=',$player)->first();
+        
+        $number = $temp->number;
+        $games=$number.'games';
+        $goals=$number.'goals';
+        $assists=$number.'assists';
+        $penalties=$number.'PIM';
+        $pm=$number.'plus_minus';
+        $faceoffs=$number.'faceoffs';
+        $won=$number.'faceoffsWon';
+        $shots=$number.'shots';
+        $blocks=$number.'blockedShots';
+        
+        $goalie = Field::where('player','=',$player)->where('game','=',$game)->first();
+        $goalie->games = $request->$games;
+        $goalie->plus_minus = $request->$pm;
+        $goalie->faceoffs = $request->$faceoffs;
+        $goalie->faceoffsWon = $request->$won;
+        $goalie->shots = $request->$shots;
+        $goalie->blockedShots = $request->$blocks;
+        $goalie->goals = $request->$goals;
+        $goalie->assists = $request->$assists;
+        $goalie->PIM = $request->$penalties;
+        $goalie->is_set = 1;
+        $goalie->save();
+        return redirect('games='.$game.'/update');
+    }
     public function edit($id)
     {
         //
