@@ -22,7 +22,7 @@ foreach($seasons as $season)
                 <a href='{{ url('/leagues='.$leagueId.'/season='.$season->id) }}'>{{$season->seasonName}}</a>
                 @endforeach
                 @else
-                    There are no seasons for this league.
+                    {{__('messages.there_are_no_seasons_for_this_league')}}
                 @endif
             </div>
         </div>

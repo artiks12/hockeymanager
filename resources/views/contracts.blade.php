@@ -14,16 +14,16 @@
 <div class="row justify-content-center" style='margin-top:30px;'>
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header"><h4>Sign a player</h4></div>
+            <div class="card-header"><h4>{{__('messages.sign_a_player')}}</h4></div>
             <div class="card-body">
                 <h5>{{$player->name}} {{$player->surname}}</h5>
-                <h6>Birthday: {{$player->birthday}}</h6>
-                <h6>Height: {{$player->height}}</h6>
-                <h6>Weight: {{$player->weight}}</h6>
+                <h6>{{__('messages.birthday')}} {{$player->birthday}}</h6>
+                <h6>{{__('messages.height')}} {{$player->height}}</h6>
+                <h6>{{__('messages.weight')}} {{$player->weight}}</h6>
                 {{ Form::open([ 'method' => 'post', 'url' => 'player='.$player->id.'/team='.$team->id.'/signed'])}}
                     <table>
                         <tr>
-                            <td>{{ Form::label('number', 'Number:') }}</td>
+                            <td>{{ Form::label('number', __('messages.number').':') }}</td>
                             <td>{{ Form::text(('number'), $player->number, ['class' => 'form-control'.
                             ($errors-> has('number') ? ' is-invalid' : '' )]) }}
                         @if ($errors-> has('number'))
@@ -34,7 +34,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>{{ Form::label('money', 'Total Sallary:') }}</td>
+                            <td>{{ Form::label('money', __('messages.total_salary').':') }}</td>
                             <td>{{ Form::text(('money'), '', ['class' => 'form-control'.
                             ($errors-> has('money') ? ' is-invalid' : '' )]) }}
                         @if ($errors-> has('money'))
@@ -45,7 +45,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>{{ Form::label('years', 'Years:') }}</td>
+                            <td>{{ Form::label('years', __('messages.years').':') }}</td>
                             <td>{{ Form::text(('years'), '', ['class' => 'form-control'.
                             ($errors-> has('years') ? ' is-invalid' : '' )]) }}
                         @if ($errors-> has('years'))
@@ -56,7 +56,7 @@
                             </td>
                         </tr>
                     </table>
-                {{ Form::submit('Sign') }}
+                {{ Form::submit(__('messages.sign')) }}
                 {{ Form::close() }}
             </div>
         </div>
@@ -68,9 +68,9 @@
 <div class="row justify-content-center" style='margin-top:30px;'>
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header"><h4>Sign a player</h4></div>
+            <div class="card-header"><h4>{{__('messages.sign_a_player')}}</h4></div>
             <div class="card-body">
-                This player already has a team
+                {{__('messages.this_player_already_has_a_team')}}
             </div>
         </div>
     </div>

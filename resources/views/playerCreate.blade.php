@@ -15,13 +15,13 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <div class="leagueName">Add Games</div>
+                <div class="leagueName">{{__('messages.create_player')}}</div>
             </div>
             <div class="card-body">
                 {{ Form::open([ 'method' => 'post' , 'action' => 'PlayerController@store'])}}
                     <table>
                         <tr>
-                            <td>{{ Form::label('Name', 'Name:') }}</td>
+                            <td>{{ Form::label('Name', __('messages.name').':') }}</td>
                             <td>{{ Form::text('Name', '',['class' => 'form-control'.
                             ($errors-> has('Name') ? ' is-invalid' : '' )]) }}
                             @if ($errors-> has('Name'))
@@ -32,7 +32,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>{{ Form::label('Surname', 'Surname:') }}</td>
+                            <td>{{ Form::label('Surname', __('messages.surname').':') }}</td>
                             <td>{{ Form::text('Surname', '',['class' => 'form-control'.
                             ($errors-> has('Surname') ? ' is-invalid' : '' )]) }}
                             @if ($errors-> has('Surname'))
@@ -43,7 +43,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>{{ Form::label('date', 'Birthday:') }}</td>
+                            <td>{{ Form::label('date', __('messages.birthday').':') }}</td>
                             <td>{{ Form::date('date', '', ['class' => 'form-control'.
                             ($errors-> has('date') ? ' is-invalid' : '' )]) }}
                             @if ($errors-> has('date'))
@@ -54,7 +54,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>{{ Form::label('height', 'Height:') }}</td>
+                            <td>{{ Form::label('height', __('messages.height').':') }}</td>
                             <td>{{ Form::number('height', '',['class' => 'form-control'.
                             ($errors-> has('height') ? ' is-invalid' : '' )]) }}
                             @if ($errors-> has('height'))
@@ -65,7 +65,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>{{ Form::label('weight', 'Weight:') }}</td>
+                            <td>{{ Form::label('weight', __('messages.weight').':') }}</td>
                             <td>{{ Form::number('weight', '',['class' => 'form-control'.
                             ($errors-> has('weight') ? ' is-invalid' : '' )]) }}
                             @if ($errors-> has('weight'))
@@ -76,8 +76,8 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>{{ Form::label('Position', 'Position:') }}</td>
-                            <td>{{ Form::select('Position', array('G' => 'Goalie', 'D' => 'Defenceman', 'F' => 'Forward'), old('Position'),['class' => 'form-control'.
+                            <td>{{ Form::label('Position', __('messages.position').':') }}</td>
+                            <td>{{ Form::select('Position', array('G' => __('messages.goalie'), 'D' => __('messages.defenceman'), 'F' => __('messages.forward')), old('Position'),['class' => 'form-control'.
                             ($errors-> has('Position') ? ' is-invalid' : '' )]) }}
                             @if ($errors-> has('Position'))
                                 <span class="invalid-feedback">
@@ -87,7 +87,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>{{ Form::label('Team', 'Team:') }}</td>
+                            <td>{{ Form::label('Team', __('messages.team').':') }}</td>
                             <td>{{ Form::select('Team', $teams, '',['class' => 'form-control'.
                             ($errors-> has('Team') ? ' is-invalid' : '' )]) }}
                             @if ($errors-> has('Team'))
@@ -98,7 +98,7 @@
                             </td>
                         </tr>
                     </table>
-                {{ Form::submit('Add') }}
+                {{ Form::submit(__('messages.add')) }}
                 {{ Form::close() }}
             </div>
         </div>
@@ -111,10 +111,10 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <div class="leagueName">Add Games</div>
+                <div class="leagueName">{{__('messages.create_player')}}</div>
             </div>
             <div class="card-body">
-                There are no teams in the league to add players to
+                {{__('messages.there_are_no_teams_in_the_league_to_add_players_to')}}
             </div>
         </div>
     </div>

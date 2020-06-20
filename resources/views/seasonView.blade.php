@@ -7,9 +7,12 @@
             <div class="card-header">
                 <div class="leagueName" style="display:inline;">{{$info->leagueName}} {{$season->seasonName}}</div>
                 @if(!Auth::guest())
-                @if($info->commisioner==$user->id && $season->id == $season->id)
-                <div class="makeSeason" style="float:right; display:inline;"><a href="{{action('SeasonController@options',$info->id)}}">Options</a></div>
-                @endif
+                    <?php 
+                        $user = Auth::user();
+                    ?>
+                    @if($info->commisioner==$user->id && $latest->id == $season->id)
+                    <div class="makeSeason" style="float:right; display:inline;"><a href="{{action('SeasonController@options',$info->id)}}">{{__('messages.options')}}</a></div>
+                    @endif
                 @endif
             </div>
             <div class="card-body">
@@ -19,7 +22,7 @@
     </div>
     <div class="col-md-4">
         <div class="card">
-            <div class="card-header">Team Statistics</div>
+            <div class="card-header">{{__('messages.team_statistics')}}</div>
             <div class="card-body">
                 <table>
                     <tr>
@@ -45,9 +48,11 @@
                     </tr>
                 @endforeach
                 </table>
-                G - games, W - wins, L - loses, T - overtimes, Pts - points, GD - goal diference
+                G - {{__('messages.games')}}, W - {{__('messages.wins')}}, L - {{__('messages.loses')}}, T - {{__('messages.overtimes')}}, Pts - {{__('messages.points')}}, GD - {{__('messages.goal_difference')}}
             </div>
         </div>
     </div>
 </div>
 @endsection
+
+

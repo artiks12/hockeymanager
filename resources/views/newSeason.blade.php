@@ -9,13 +9,13 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <div class="leagueName">Add Teams</div>
+                <div class="leagueName">{{__('messages.new_season')}}</div>
             </div>
             <div class="card-body">
                 {{ Form::open([ 'method' => 'post' , 'action' => 'LeagueController@seasonCreate', 'id' => $id])}}
                     <table>
                         <tr>
-                            <td>{{ Form::label('name', 'Name:') }}</td>
+                            <td>{{ Form::label('name', __('messages.name').':') }}</td>
                             <td>{{ Form::text(('name'), '', ['class' => 'form-control'.
                             ($errors-> has('name') ? ' is-invalid' : '' )]) }}
                             @if ($errors-> has('name'))
@@ -32,7 +32,7 @@
                             </tr>
                         @endforeach
                     </table>
-                {{ Form::submit('Add') }}
+                {{ Form::submit(__('messages.create')) }}
                 {{ Form::close() }}
             </div>
         </div>
@@ -45,10 +45,10 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <div class="leagueName">Add Teams</div>
+                <div class="leagueName">{{__('messages.add_teams')}}</div>
             </div>
             <div class="card-body">
-                There are no teams to add.
+                {{__('messages.there_are_no_teams_to_add')}}
             </div>
         </div>
     </div>

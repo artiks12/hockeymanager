@@ -4,13 +4,13 @@
 <div class="row justify-content-center" style='margin-top:30px;'>
     <div class="col-md-4">
         <div class="card">
-            <div class="card-header">Filter</div>
+            <div class="card-header">{{__('messages.filter')}}</div>
 
             <div class="card-body">
                 {{ Form::open([ 'method' => 'get', 'action' => 'TeamController@search'])}}
                     <table>
                         <tr>
-                            <td>{{ Form::label('Team', 'Team:') }}</td>
+                            <td>{{ Form::label('Team', __('messages.team').':') }}</td>
                             <td>{{ Form::text('Team', '',['class' => 'form-control'.
                             ($errors-> has('Team') ? ' is-invalid' : '' )]) }}
                             @if ($errors-> has('Team'))
@@ -21,14 +21,14 @@
                             </td>
                         </tr>
                     </table>
-                {{ Form::submit('Add') }}
+                {{ Form::submit(__('messages.search')) }}
                 {{ Form::close() }}
             </div>
         </div>
     </div>
     <div class="col-md-8">
         <div class="card">
-            <div class="card-header">Dashboard</div>
+            <div class="card-header">{{__('messages.teams')}}</div>
 
             <div class="card-body">
                 <?php
@@ -38,7 +38,7 @@
                 @foreach($teams as $team)
                 @if($team->league==NULL)
                 @if($count==0)
-                <h4>Teams with no league</h4>
+                <h4>{{__('messages.teams_with_no_league')}}</h4>
                 <ul>
                 <?php $count++; ?>
                 @endif

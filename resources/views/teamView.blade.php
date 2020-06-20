@@ -7,20 +7,20 @@
 <div class="row justify-content-center" style='margin-top:30px;'>
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header">{{$info->teamName}} Latest Season: @if($info->season!=NULL){{$season->seasonName}}@else None @endif</div>
+            <div class="card-header">{{$info->teamName}} {{__('messages.latest_season')}}: @if($info->season!=NULL){{$season->seasonName}}@else {{__('messages.none')}} @endif</div>
             <div class="card-body">
-                <p><a class="btn btn-primary @if($page=='roster') active @endif" style='width:49%;' href='{{url('teams='.$info->id.'/page=roster')}}'>Team Roster</a>
-                <a class="btn btn-primary @if($page=='stats') active @endif" style='width:49%;' href='{{url('teams='.$info->id.'/page=stats')}}'>Player Statistics</a></p>
+                <p><a class="btn btn-primary @if($page=='roster') active @endif" style='width:49%;' href='{{url('teams='.$info->id.'/page=roster')}}'>{{__('messages.team_roster')}}</a>
+                <a class="btn btn-primary @if($page=='stats') active @endif" style='width:49%;' href='{{url('teams='.$info->id.'/page=stats')}}'>{{__('messages.player_statistics')}}</a></p>
                 @if($page=='roster')
                 <table>
                     <tr>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Number</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Goalie</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Birthday</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Height</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Weight</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Cap Hit</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Years</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.number')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goalie')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.birthday')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.height')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.weight')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.cap_hit')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.years')}}</td>
                     </tr>
                     @foreach($players as $player)
                     @if($player->position=='G' && $player->team==$info->id)
@@ -36,13 +36,13 @@
                     @endif
                     @endforeach
                     <tr>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Number</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Defenceman</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Birthday</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Height</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Weight</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Cap Hit</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Years</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.number')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.defenceman')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.birthday')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.height')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.weight')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.cap_hit')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.years')}}</td>
                     </tr>
                     @foreach($players as $player)
                     @if($player->position=='D' && $player->team==$info->id)
@@ -58,13 +58,13 @@
                     @endif
                     @endforeach
                     <tr>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Number</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Forward</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Birthday</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Height</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Weight</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Cap Hit</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Years</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.number')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.forward')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.birthday')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.height')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.weight')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.cap_hit')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.years')}}</td>
                     </tr>
                     @foreach($players as $player)
                     @if($player->position=='F' && $player->team==$info->id)
@@ -83,17 +83,17 @@
             @endif
             @if($page=='stats')
             <p>
-            <h4>Regular Season</h4>
+            <h4>{{__('messages.regular_season')}}</h4>
                 <table>
                     <tr>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Number</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Goalie</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Games</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Shots on Goal</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Goals allowed</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Goals Against average</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Save Percentage</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Shutouts</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.number')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goalie')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.games')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.sog')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals_allowed')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals_aggainst_average')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.save_percentage')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.shutouts')}}</td>
                     </tr>
                     @foreach($players as $player)
                     @if($player->position=='G' && $player->team==$info->id)
@@ -134,14 +134,14 @@
                     @endif
                     @endforeach
                     <tr>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Number</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Defenceman</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Games</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Goals</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Asists</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Points</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.number')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.defenceman')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.games')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.assists')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.points')}}</td>
                         <td style='border:solid; border-width:1px; font-weight:bold;'>+/-</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Penalties in minutes</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.pim')}}</td>
                     </tr>
                     @foreach($players as $player)
                     @if($player->position=='D' && $player->team==$info->id)
@@ -179,14 +179,14 @@
                     @endif
                     @endforeach
                     <tr>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Number</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Forward</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Games</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Goals</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Asists</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Points</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.number')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.forward')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.games')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.assists')}}</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.points')}}</td>
                         <td style='border:solid; border-width:1px; font-weight:bold;'>+/-</td>
-                        <td style='border:solid; border-width:1px; font-weight:bold;'>Penalties in minutes</td>
+                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.pim')}}</td>
                     </tr>
                     @foreach($players as $player)
                     @if($player->position=='F' && $player->team==$info->id)
@@ -226,17 +226,17 @@
                 </table>
             </p>
             <p>
-            <h4>Playoffs</h4>
+            <h4>{{__('messages.play-off')}}</h4>
             <table>
                 <tr>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Number</td>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Goalie</td>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Games</td>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Shots on Goal</td>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Goals allowed</td>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Goals Against average</td>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Save Percentage</td>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Shutouts</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.number')}}</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goalie')}}</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.games')}}</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.sog')}}</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals_allowed')}}</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals_aggainst_average')}}</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.save_percentage')}}</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.shutouts')}}</td>
                 </tr>
                 @foreach($players as $player)
                 @if($player->position=='G' && $player->team==$info->id)
@@ -277,14 +277,14 @@
                 @endif
                 @endforeach
                 <tr>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Number</td>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Defenceman</td>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Games</td>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Goals</td>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Asists</td>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Points</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.number')}}</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.defenceman')}}</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.games')}}</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals')}}</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.assists')}}</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.points')}}</td>
                     <td style='border:solid; border-width:1px; font-weight:bold;'>+/-</td>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Penalties in minutes</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.pim')}}</td>
                 </tr>
                 @foreach($players as $player)
                 @if($player->position=='D' && $player->team==$info->id)
@@ -322,14 +322,14 @@
                 @endif
                 @endforeach
                 <tr>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Number</td>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Forward</td>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Games</td>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Goals</td>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Asists</td>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Points</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.number')}}</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.forward')}}</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.games')}}</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals')}}</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.assists')}}</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.points')}}</td>
                     <td style='border:solid; border-width:1px; font-weight:bold;'>+/-</td>
-                    <td style='border:solid; border-width:1px; font-weight:bold;'>Penalties in minutes</td>
+                    <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.pim')}}</td>
                 </tr>
                 @foreach($players as $player)
                 @if($player->position=='F' && $player->team==$info->id)

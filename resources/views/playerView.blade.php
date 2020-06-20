@@ -7,24 +7,24 @@
             <div class="card-header">{{$player->name}} {{$player->surname}}</div>
 
             <div class="card-body">
-                <p>Birthday: {{$player->birthday}}</p>
-                <p>Height: {{$player->height}}</p>
-                <p>Weight: {{$player->weight}}</p>
-                <p>Team: @if($player->team!=NULL){{$team->teamName}}@else None @endif</p>
+                <p>{{__('messages.birthday')}}: {{$player->birthday}}</p>
+                <p>{{__('messages.height')}}: {{$player->height}}</p>
+                <p>{{__('messages.weight')}}: {{$player->weight}}</p>
+                <p>{{__('messages.team')}}: @if($player->team!=NULL){{$team->teamName}}@else {{__('messages.none')}} @endif</p>
                 <br>
                 @if($set==2)
                 <p>
                     @if($player->position=='D' || $player->position=='F')
-                    <h5>Regular season:</h5>
+                    <h5>{{__('messages.regular_season')}}:</h5>
                     <table>
                         <tr>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>League, Season</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Game</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Goals</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Assists</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Points</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.league')}} {{__('messages.season')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.game')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.assists')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.points')}}</td>
                             <td style='border:solid; border-width:1px; font-weight:bold;'>+/-</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Penalties in minutes</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.pim')}}</td>
                         </tr>
                         @foreach($stats as $stat)
                         <?php
@@ -34,7 +34,7 @@
                         ?>
                         @if($game->type==1)
                         <tr>
-                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Regular season</td>
+                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.regular_season')}}</td>
                             <td style='border:solid; border-width:1px;'>{{$game->id}}</td>
                             <td style='border:solid; border-width:1px;'>{{$stat->goals}}</td>
                             <td style='border:solid; border-width:1px;'>{{$stat->assists}}</td>
@@ -47,16 +47,16 @@
                     </table>
                     </p>
                     <p>
-                    <h5>Playoffs:</h5>
+                    <h5>{{__('messages.play-off')}}:</h5>
                     <table>
                         <tr>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>League, Season</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Game</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Goals</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Assists</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Points</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.league')}} {{__('messages.season')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.game')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.assists')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.points')}}</td>
                             <td style='border:solid; border-width:1px; font-weight:bold;'>+/-</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Penalties in minutes</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.pim')}}</td>
                         </tr>
                         @foreach($stats as $stat)
                         <?php
@@ -66,7 +66,7 @@
                         ?>
                         @if($game->type==2)
                         <tt>
-                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Regular season</td>
+                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.regular_season')}}</td>
                             <td style='border:solid; border-width:1px;'>{{$game->id}}</td>
                             <td style='border:solid; border-width:1px;'>{{$stat->goals}}</td>
                             <td style='border:solid; border-width:1px;'>{{$stat->assists}}</td>
@@ -78,20 +78,20 @@
                         @endforeach
                     </table>
                     @else
-                    <h5>Regular season:</h5>
+                    <h5>{{__('messages.regular_season')}}:</h5>
                     <table>
                         <tr>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>League, Season</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Game</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>SOA</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>GA</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>GAA</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Save%</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Time on ice</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Shutouts</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Goals</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Assists</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>PIM</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.league')}} {{__('messages.season')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.game')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.sog')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals_allowed')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals_aggainst_average')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.save_percentage')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.time_on_ice')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.shutouts')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.assists')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.pim')}}</td>
                         </tr>
                         @foreach($stats as $stat)
                         <?php
@@ -101,7 +101,7 @@
                         ?>
                         @if($game->type==1)
                         <tr>
-                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Regular season</td>
+                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.regular_season')}}</td>
                             <td style='border:solid; border-width:1px;'>{{$game->id}}</td>
                             <td style='border:solid; border-width:1px;'>{{$stat->SOG}}</td>
                             <td style='border:solid; border-width:1px;'>{{$stat->GA}}</td>
@@ -118,20 +118,20 @@
                     </table>
                     </p>
                     <p>
-                    <h5>Playoffs:</h5>
+                    <h5>{{__('messages.play-off')}}:</h5>
                     <table>
                         <tr>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>League, Season</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Game</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>SOA</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>GA</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>GAA</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Save%</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Time on ice</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Shutouts</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Goals</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Assists</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>PIM</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.league')}} {{__('messages.season')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.game')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.sog')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals_allowed')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals_aggainst_average')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.save_percentage')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.time_on_ice')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.shutouts')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.assists')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.pim')}}</td>
                         </tr>
                         @foreach($stats as $stat)
                         <?php
@@ -141,7 +141,7 @@
                         ?>
                         @if($game->type==2)
                         <tt>
-                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Regular season</td>
+                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.regular_season')}}</td>
                             <td style='border:solid; border-width:1px;'>{{$game->id}}</td>
                             <td style='border:solid; border-width:1px;'>{{$stat->SOG}}</td>
                             <td style='border:solid; border-width:1px;'>{{$stat->GA}}</td>
@@ -161,17 +161,17 @@
                 @endif
                 @if($set==1)
                 <p>
-                    <h5>Latest season:</h5>
+                    <h5>{{__('messages.latest_season')}}:</h5>
                     <table>
                         @if($player->position=='D' || $player->position=='F')
                         <tr>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>League, Season</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Games</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Goals</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Assists</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Points</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.league')}} {{__('messages.season')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.games')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.assists')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.points')}}</td>
                             <td style='border:solid; border-width:1px; font-weight:bold;'>+/-</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Penalties in minutes</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.pim')}}</td>
                         </tr>
                         <?php 
                             $index = $point;
@@ -222,7 +222,7 @@
                         ?>
                         @endforeach
                         <tr onclick="location.href='{{url('players='.$player->id.'/season='.$index)}}'" style="cursor:pointer;">
-                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Regular season</td>
+                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.regular_season')}}</td>
                             <td style='border:solid; border-width:1px;'>{{$games}}</td>
                             <td style='border:solid; border-width:1px;'>{{$goals}}</td>
                             <td style='border:solid; border-width:1px;'>{{$assists}}</td>
@@ -231,7 +231,7 @@
                             <td style='border:solid; border-width:1px;'>{{$penalties}}</td>
                         </tr>
                         <tr onclick="location.href='{{url('players='.$player->id.'/season='.$index)}}'" style="cursor:pointer;">
-                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Playoffs</td>
+                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.play-off')}}</td>
                             <td style='border:solid; border-width:1px;'>{{$gamesP}}</td>
                             <td style='border:solid; border-width:1px;'>{{$goalsP}}</td>
                             <td style='border:solid; border-width:1px;'>{{$assistsP}}</td>
@@ -242,17 +242,17 @@
                         <!-- GOALIE -->
                         @else
                         <tr>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>League, Season</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Games</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>SOA</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>GA</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>GAA</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Save%</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Time on ice</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Shutouts</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Goals</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Assists</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>PIM</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.league')}} {{__('messages.season')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.games')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.sog')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals_allowed')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals_aggainst_average')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.save_percentage')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.time_on_ice')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.shutouts')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.assists')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.pim')}}</td>
                         </tr>
                         <?php 
                             $index = $point;
@@ -291,8 +291,8 @@
                                     $allowed = $stat->GA;
                                     $seconds = $stat->seconds;
                                     $shutouts = $stat->shutouts;
-                                    $goals = $stat->goals;
-                                    $assists = $stat->assists;
+                                    $goals = $stat->Goals;
+                                    $assists = $stat->Assists;
                                     $penalties = $stat->PIM;
                                 }
                                 else
@@ -302,8 +302,8 @@
                                     $allowedP += $stat->GA;
                                     $secondsP += $stat->seconds;
                                     $shutoutsP += $stat->shutouts;
-                                    $assistsP += $stat->assists;
-                                    $goalsP += $stat->goals;
+                                    $assistsP += $stat->Assists;
+                                    $goalsP += $stat->Goals;
                                     $penaltiesP += $stat->PIM;
                                 }
                                 
@@ -311,7 +311,7 @@
                         ?>
                         @endforeach
                         <tr onclick="location.href='{{url('players='.$player->id.'/season='.$index)}}'" style="cursor:pointer;">
-                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Regular season</td>
+                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.regular_season')}}</td>
                             <td style='border:solid; border-width:1px;'>{{$games}}</td>
                             <td style='border:solid; border-width:1px;'>{{$shots}}</td>
                             <td style='border:solid; border-width:1px;'>{{$allowed}}</td>
@@ -324,7 +324,7 @@
                             <td style='border:solid; border-width:1px;'>{{$penalties}}</td>
                         </tr>
                         <tr onclick="location.href='{{url('players='.$player->id.'/season='.$index)}}'" style="cursor:pointer;">
-                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Playoffs</td>
+                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.play-off')}}</td>
                             <td style='border:solid; border-width:1px;'>{{$gamesP}}</td>
                             <td style='border:solid; border-width:1px;'>{{$shotsP}}</td>
                             <td style='border:solid; border-width:1px;'>{{$allowedP}}</td>
@@ -340,7 +340,7 @@
                     </table>
                 </p>
                 <p>
-                    <h5>Previous seasons:</h5>
+                    <h5>{{__('messages.previous_seasons')}}:</h5>
                     @if($player->position=='D' || $player->position=='F')
                     <?php 
                         $rest = App\Field::where('season','!=',$index)->where('player','=',$player->id)->get();
@@ -361,13 +361,13 @@
                     @if(count($rest)>0)
                     <table>
                         <tr>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>League, Season</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Games</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Goals</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Assists</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Points</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.league')}} {{__('messages.season')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.games')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.assists')}}</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.points')}}</td>
                             <td style='border:solid; border-width:1px; font-weight:bold;'>+/-</td>
-                            <td style='border:solid; border-width:1px; font-weight:bold;'>Penalties in minutes</td>
+                            <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.pim')}}</td>
                         </tr>
                         @foreach($rest as $stat)
                             <?php 
@@ -398,7 +398,7 @@
                                     $league = App\League::where('id','=',$season->league)->first();
                                 ?>
                                 <tr onclick="location.href='{{url('players='.$player->id.'/season='.$index)}}'" style="cursor:pointer;">
-                                    <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Regular season</td>
+                                    <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.regular_season')}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$games}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$goals}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$assists}}</td>
@@ -407,7 +407,7 @@
                                     <td style='border:solid; border-width:1px;'>{{$penalties}}</td>
                                 </tr>
                                 <tr onclick="location.href='{{url('players='.$player->id.'/season='.$index)}}'" style="cursor:pointer;">
-                                    <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Playoffs</td>
+                                    <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.play-off')}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$gamesP}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$goalsP}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$assistsP}}</td>
@@ -422,7 +422,7 @@
                                     $league = App\League::where('id','=',$season->league)->first(); 
                                 ?>
                                 <tr onclick="location.href='{{url('players='.$player->id.'/season='.$index)}}'" style="cursor:pointer;">
-                                    <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Regular season</td>
+                                    <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.regular_season')}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$games}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$goals}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$assists}}</td>
@@ -431,7 +431,7 @@
                                     <td style='border:solid; border-width:1px;'>{{$penalties}}</td>
                                 </tr>
                                 <tr onclick="location.href='{{url('players='.$player->id.'/season='.$index)}}'" style="cursor:pointer;">
-                                    <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Playoffs</td>
+                                    <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.play-off')}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$gamesP}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$goalsP}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$assistsP}}</td>
@@ -475,7 +475,7 @@
                                     $league = App\League::where('id','=',$season->league)->first();
                                 ?>
                                 <tr onclick="location.href='{{url('players='.$player->id.'/season='.$stat->season)}}'" style="cursor:pointer;">
-                                    <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Regular season</td>
+                                    <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.regular_season')}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$games}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$goals}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$assists}}</td>
@@ -484,7 +484,7 @@
                                     <td style='border:solid; border-width:1px;'>{{$penalties}}</td>
                                 </tr>
                                 <tr onclick="location.href='{{url('players='.$player->id.'/season='.$stat->season)}}'" style="cursor:pointer;">
-                                    <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Playoffs</td>
+                                    <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.play-off')}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$gamesP}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$goalsP}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$assistsP}}</td>
@@ -524,7 +524,7 @@
                                     $league = App\League::where('id','=',$season->league)->first(); 
                                 ?>
                                 <tr onclick="location.href='{{url('players='.$player->id.'/season='.$index)}}'" style="cursor:pointer;">
-                                    <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Regular season</td>
+                                    <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.regular_season')}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$games}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$goals}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$assists}}</td>
@@ -533,7 +533,7 @@
                                     <td style='border:solid; border-width:1px;'>{{$penalties}}</td>
                                 </tr>
                                 <tr onclick="location.href='{{url('players='.$player->id.'/season='.$index)}}'" style="cursor:pointer;">
-                                    <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Playoffs</td>
+                                    <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.play-off')}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$gamesP}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$goalsP}}</td>
                                     <td style='border:solid; border-width:1px;'>{{$assistsP}}</td>
@@ -577,7 +577,7 @@
                         @endforeach
                     </table>
                         @else
-                            There are no statistics from previous seasons
+                            {{__('messages.there_are_no_statistics_from_previous_seasons')}}
                         @endif
                         <!-- GOALIE -->
                         @else
@@ -605,17 +605,17 @@
                             @if(count($rest)>0)
                                 <table>
                                     <tr>
-                                        <td style='border:solid; border-width:1px; font-weight:bold;'>League, Season</td>
-                                        <td style='border:solid; border-width:1px; font-weight:bold;'>Games</td>
-                                        <td style='border:solid; border-width:1px; font-weight:bold;'>SOA</td>
-                                        <td style='border:solid; border-width:1px; font-weight:bold;'>GA</td>
-                                        <td style='border:solid; border-width:1px; font-weight:bold;'>GAA</td>
-                                        <td style='border:solid; border-width:1px; font-weight:bold;'>Save%</td>
-                                        <td style='border:solid; border-width:1px; font-weight:bold;'>Time on ice</td>
-                                        <td style='border:solid; border-width:1px; font-weight:bold;'>Shutouts</td>
-                                        <td style='border:solid; border-width:1px; font-weight:bold;'>Goals</td>
-                                        <td style='border:solid; border-width:1px; font-weight:bold;'>Assists</td>
-                                        <td style='border:solid; border-width:1px; font-weight:bold;'>PIM</td>
+                                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.league')}} {{__('messages.season')}}</td>
+                                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.games')}}</td>
+                                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.sog')}}</td>
+                                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals_allowed')}}</td>
+                                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals_aggainst_average')}}</td>
+                                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.save_percentage')}}</td>
+                                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.time_on_ice')}}</td>
+                                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.shutouts')}}</td>
+                                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.goals')}}</td>
+                                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.assists')}}</td>
+                                        <td style='border:solid; border-width:1px; font-weight:bold;'>{{__('messages.pim')}}</td>
                                     </tr>
                                 @foreach($rest as $stat)
                                     <?php 
@@ -630,8 +630,8 @@
                                                 $allowed = $stat->GA;
                                                 $seconds = $stat->seconds;
                                                 $shutouts = $stat->shutouts;
-                                                $goals = $stat->goals;
-                                                $assists = $stat->assists;
+                                                $goals = $stat->Goals;
+                                                $assists = $stat->Assists;
                                                 $penalties = $stat->PIM;
                                             }
                                             else
@@ -641,15 +641,15 @@
                                                 $allowedP += $stat->GA;
                                                 $secondsP += $stat->seconds;
                                                 $shutoutsP += $stat->shutouts;
-                                                $assistsP += $stat->assists;
-                                                $goalsP += $stat->goals;
+                                                $assistsP += $stat->Assists;
+                                                $goalsP += $stat->Goals;
                                                 $penaltiesP += $stat->PIM;
                                             }
                                             $season = App\Season::where('id','=',$index)->first();
                                             $league = App\League::where('id','=',$season->league)->first();
                                         ?>
                                         <tr onclick="location.href='{{url('players='.$player->id)}}'" style="cursor:pointer;">
-                                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Regular season</td>
+                                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.regular_season')}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$games}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$shots}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$allowed}}</td>
@@ -662,7 +662,7 @@
                                             <td style='border:solid; border-width:1px;'>{{$penalties}}</td>
                                         </tr>
                                         <tr onclick="location.href='{{url('players='.$player->id)}}'" style="cursor:pointer;">
-                                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Playoffs</td>
+                                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.play-off')}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$gamesP}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$shotsP}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$allowedP}}</td>
@@ -681,7 +681,7 @@
                                             $league = App\League::where('id','=',$season->league)->first(); 
                                         ?>
                                         <tr onclick="location.href='{{url('players='.$player->id)}}'" style="cursor:pointer;">
-                                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Regular season</td>
+                                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.regular_season')}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$games}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$shots}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$allowed}}</td>
@@ -694,7 +694,7 @@
                                             <td style='border:solid; border-width:1px;'>{{$penalties}}</td>
                                         </tr>
                                         <tr onclick="location.href='{{url('players='.$player->id)}}'" style="cursor:pointer;">
-                                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Playoffs</td>
+                                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.play-off')}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$gamesP}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$shotsP}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$allowedP}}</td>
@@ -731,8 +731,8 @@
                                                 $allowed = $stat->GA;
                                                 $seconds = $stat->seconds;
                                                 $shutouts = $stat->shutouts;
-                                                $goals = $stat->goals;
-                                                $assists = $stat->assists;
+                                                $goals = $stat->Goals;
+                                                $assists = $stat->Assists;
                                                 $penalties = $stat->PIM;
                                             }
                                             else
@@ -742,15 +742,15 @@
                                                 $allowedP += $stat->GA;
                                                 $secondsP += $stat->seconds;
                                                 $shutoutsP += $stat->shutouts;
-                                                $assistsP += $stat->assists;
-                                                $goalsP += $stat->goals;
+                                                $assistsP += $stat->Assists;
+                                                $goalsP += $stat->Goals;
                                                 $penaltiesP += $stat->PIM;
                                             }
                                             $season = App\Season::where('id','=',$index)->first();
                                             $league = App\League::where('id','=',$season->league)->first();
                                         ?>
                                         <tr onclick="location.href='{{url('players='.$player->id)}}'" style="cursor:pointer;">
-                                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Regular season</td>
+                                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.regular_season')}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$games}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$shots}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$allowed}}</td>
@@ -763,7 +763,7 @@
                                             <td style='border:solid; border-width:1px;'>{{$penalties}}</td>
                                         </tr>
                                         <tr onclick="location.href='{{url('players='.$player->id)}}'" style="cursor:pointer;">
-                                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Playoffs</td>
+                                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.play-off')}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$gamesP}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$shotsP}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$allowedP}}</td>
@@ -785,8 +785,8 @@
                                             $allowed = $stat->GA;
                                             $seconds = $stat->seconds;
                                             $shutouts = $stat->shutouts;
-                                            $goals = $stat->goals;
-                                            $assists = $stat->assists;
+                                            $goals = $stat->Goals;
+                                            $assists = $stat->Assists;
                                             $penalties = $stat->PIM;
                                         }
                                         else
@@ -796,8 +796,8 @@
                                             $allowedP += $stat->GA;
                                             $secondsP += $stat->seconds;
                                             $shutoutsP += $stat->shutouts;
-                                            $assistsP += $stat->assists;
-                                            $goalsP += $stat->goals;
+                                            $assistsP += $stat->Assists;
+                                            $goalsP += $stat->Goals;
                                             $penaltiesP += $stat->PIM;
                                         }
                                         $season = App\Season::where('id','=',$index)->first();
@@ -810,7 +810,7 @@
                                             $league = App\League::where('id','=',$season->league)->first(); 
                                         ?>
                                         <tr onclick="location.href='{{url('players='.$player->id)}}'" style="cursor:pointer;">
-                                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Regular season</td>
+                                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.regular_season')}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$games}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$shots}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$allowed}}</td>
@@ -823,7 +823,7 @@
                                             <td style='border:solid; border-width:1px;'>{{$penalties}}</td>
                                         </tr>
                                         <tr onclick="location.href='{{url('players='.$player->id)}}'" style="cursor:pointer;">
-                                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} Playoffs</td>
+                                            <td style='border:solid; border-width:1px;'>{{$league->leagueName}} {{$season->seasonName}} {{__('messages.play-off')}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$gamesP}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$shotsP}}</td>
                                             <td style='border:solid; border-width:1px;'>{{$allowedP}}</td>
@@ -860,8 +860,8 @@
                                                 $allowed = $stat->GA;
                                                 $seconds = $stat->seconds;
                                                 $shutouts = $stat->shutouts;
-                                                $goals = $stat->goals;
-                                                $assists = $stat->assists;
+                                                $goals = $stat->Goals;
+                                                $assists = $stat->Assists;
                                                 $penalties = $stat->PIM;
                                             }
                                             else
@@ -871,8 +871,8 @@
                                                 $allowedP += $stat->GA;
                                                 $secondsP += $stat->seconds;
                                                 $shutoutsP += $stat->shutouts;
-                                                $assistsP += $stat->assists;
-                                                $goalsP += $stat->goals;
+                                                $assistsP += $stat->Assists;
+                                                $goalsP += $stat->Goals;
                                                 $penaltiesP += $stat->PIM;
                                             }
                                         ?>
@@ -880,14 +880,14 @@
                                 @endforeach
                                 </table>
                         @else 
-                        There are no statistics from previous seasons
+                        {{__('messages.there_are_no_statistics_from_previous_seasons')}}
                         @endif
                     @endif  
                 </p>
                 @endif
                 @if($set==0)
                 <p>
-                    This Player Has no statistics
+                    {{__('messages.this_player_has_no_statistics')}}
                 </p>
                 @endif
             </div>

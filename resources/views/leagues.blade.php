@@ -4,7 +4,7 @@
 <div class="row justify-content-center" style='margin-top:30px;'>
     <div class="col-md-8">
         <div class="card">
-            <div class="card-header"><h4>Leagues</h4></div>
+            <div class="card-header"><h4>{{__('messages.leagues')}}</h4></div>
             
             <div class="card-body">
                 @foreach($leagues as $league)

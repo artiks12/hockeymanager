@@ -15,7 +15,7 @@
 <div class="row justify-content-center" style='margin-top:30px;'>
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header">League Maker</div>
+            <div class="card-header">{{__('messages.league_maker')}}</div>
 
             <div class="card-body">
                 <?php 
@@ -25,7 +25,7 @@
                 {{ Form::open([ 'method' => 'post' , 'action' => 'LeagueController@store'])}}
                     <table>
                         <tr>
-                            <td>{{ Form::label('name', 'Name:') }}</td>
+                            <td>{{ Form::label('name', __('messages.name').':') }}</td>
                             <td>{{ Form::text(('name'), '', ['class' => 'form-control'.
                             ($errors-> has('name') ? ' is-invalid' : '' )]) }}
                             @if ($errors-> has('name'))
@@ -36,7 +36,7 @@
                             </td>
                         </tr>
                     </table>
-                {{ Form::submit('Create') }}
+                {{ Form::submit(__('messages.create')) }}
                 {{ Form::close() }}
             </div>
         </div>
