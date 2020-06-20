@@ -20,8 +20,20 @@ class SeasonController extends Controller
 
     public function options($id)
     {
-        $info = League::where('id','=',$id)->first();
-        return view('options',array('info' => $info, 'league' => 1, 'id' => $id));
+        if(auth()->user())
+        {
+            $user = auth()->user();
+            $info = League::where('id','=',$id)->first();
+            if($info->commisioner==$user->id)
+            {
+                return view('options',array('info' => $info, 'league' => 1, 'id' => $id));
+            }
+            return redirect('leagues='.$id);
+        }
+        else
+        {
+            return redirect('leagues='.$id);
+        }
     }
     /**
      * Show the form for creating a new resource.
