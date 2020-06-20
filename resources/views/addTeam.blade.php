@@ -9,7 +9,7 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <div class="leagueName">Add Teams</div>
+                <div class="leagueName">{{__('messages.add_teams')}}</div>
             </div>
             <div class="card-body">
                 {{ Form::open([ 'method' => 'post' , 'action' => 'LeagueController@import'])}}
@@ -21,7 +21,7 @@
                             </tr>
                         @endforeach
                     </table>
-                {{ Form::submit('Add') }}
+                {{ Form::submit(__('messages.add')) }}
                 {{ Form::close() }}
             </div>
         </div>
