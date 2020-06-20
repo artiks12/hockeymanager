@@ -9,6 +9,8 @@ use App\League;
 use App\Season;
 use App\TeamStat;
 use App\Team;
+use App\Goalie;
+use App\Field;
 
 class LeagueController extends Controller
 {
@@ -26,22 +28,31 @@ class LeagueController extends Controller
     {
         $info = League::where('id','=',$leagueId)->first();
         $season = Season::where('id','=',$seasonId)->first();
+        $latest = Season::where('league','=',$leagueId)->orderBy('id','desc')->first();
         $stats = TeamStat::where('season','=',$season->id)->orderBy('points')->orderBy('goalDifference')->orderBy('victories')->get();
         $teams = Team::all();
-        return view('seasonView',array('info' => $info, 'league' => 2, 'season' => $season, 'stats' => $stats, 'teams' => $teams));
+        return view('seasonView',array('latest' => $latest,'info' => $info, 'league' => 2, 'season' => $season, 'stats' => $stats, 'teams' => $teams));
     }
     public function begin()
     {
-        $user = auth()->user();
-        if(League::where('commisioner','=',$user->id)->exists()) 
+        if(auth()->user())
         {
-            $league = League::where('commisioner','=',$user->id)->first();
-            return redirect('league='.$league->id);
+            $user = auth()->user();
+            if(League::where('commisioner','=',$user->id)->exists()) 
+            {
+                $league = League::where('commisioner','=',$user->id)->first();
+                return redirect('league='.$league->id);
+            }
+            else
+            {
+                return view('myLeague');
+            }
         }
         else
         {
-            return view('myLeague');
+            return redirect('leagues');
         }
+        
     }
     /**
      * Show the form for creating a new resource.
@@ -50,23 +61,31 @@ class LeagueController extends Controller
      */
     public function menu($id)
     {
-        $info = League::where('id','=',$id)->first();
-        if(Season::where('league','=',$info->id)->exists())
+        if(auth()->user())
         {
-            $user = auth()->user();
-            $season = Season::where('league','=',$info->id)->orderBy('id','desc')->first();
-            $stats = TeamStat::where('season','=',$season->id)->orderBy('points')->orderBy('goalDifference')->orderBy('victories')->get();
-            $teams = Team::all();
-            if($info->commisioner!=$user->id)
+            $info = League::where('id','=',$id)->first();
+            if(Season::where('league','=',$info->id)->exists())
             {
+                $user = auth()->user();
+                $season = Season::where('league','=',$info->id)->orderBy('id','desc')->first();
+                $stats = TeamStat::where('season','=',$season->id)->orderBy('points')->orderBy('goalDifference')->orderBy('victories')->get();
+                $teams = Team::all();
                 $league = League::where('id','=',$id)->first();
                 $latest = Season::where('league','=',$league->id)->orderBy('id','desc')->first();
-                return redirect('/leagues='.$info->id.'/season='.$latest->id);
-
-            } 
-            return view('seasonView',array('user' => $user, 'info' => $info, 'league' => 2, 'season' => $season, 'stats' => $stats, 'teams' => $teams));
+                if($info->commisioner!=$user->id)
+                {
+                    $league = League::where('id','=',$id)->first();
+                    $latest = Season::where('league','=',$league->id)->orderBy('id','desc')->first();
+                    return redirect('/leagues='.$info->id.'/season='.$latest->id);
+                } 
+                return view('seasonView',array('latest' => $latest,'user' => $user, 'info' => $info, 'league' => 2, 'season' => $season, 'stats' => $stats, 'teams' => $teams));
+            }
+            return redirect('/league='.$id.'/options');
         }
-        return redirect('/league='.$id.'/options');
+        else
+        {
+            return redirect('leagues='.$id);
+        }
     }
     public function add($id)
     {
