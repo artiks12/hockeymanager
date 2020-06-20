@@ -20,16 +20,17 @@ class CreateGoaliesTable extends Migration
             $table->foreignId('season')->constrained();
             $table->foreignId('team')->constrained();
             $table->foreignId('game')->constrained();
-            $table->integer('games');
-            $table->integer('wins');
-            $table->integer('loses');
-            $table->integer('SOG');
-            $table->integer('GA');
-            $table->integer('seconds');
-            $table->integer('shutouts');
-            $table->integer('Goals');
-            $table->integer('Assists');
-            $table->integer('PIM');
+            $table->integer('games')->default(0);
+            $table->integer('wins')->default(0);
+            $table->integer('loses')->default(0);
+            $table->integer('SOG')->default(0);
+            $table->integer('GA')->default(0);
+            $table->integer('seconds')->default(0);
+            $table->integer('shutouts')->default(0);
+            $table->integer('Goals')->default(0);
+            $table->integer('Assists')->default(0);
+            $table->integer('PIM')->default(0);
+            $table->integer('is_set')->default(0);
         });
     }
 
