@@ -10,14 +10,15 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js', env('REDIRECT_HTTPS')) }}" defer></script>
+    
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css', env('REDIRECT_HTTPS')) }}" rel="stylesheet">
     <style>
     a.card-body
     {
@@ -55,20 +56,20 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        <li><a class="nav-link" href="{{ url('leagues') }}">Leagues</a></li>
-                        <li><a class="nav-link" href="{{ url('players') }}">Players</a></li>
-                        <li><a class="nav-link" href="{{ url('teams') }}">Teams</a></li>                         
-                        <li><a class="nav-link" href="{{ url('games') }}">Games</a></li>
+                        <li><a class="nav-link" href="{{ url('leagues') }}">{{__('messages.leagues')}}</a></li>
+                        <li><a class="nav-link" href="{{ url('players') }}">{{__('messages.players')}}</a></li>
+                        <li><a class="nav-link" href="{{ url('teams') }}">{{__('messages.teams')}}</a></li>                         
+                        <li><a class="nav-link" href="{{ url('games') }}">{{__('messages.games')}}</a></li>
                         @if ( !Auth::guest())
                             <?php 
                                 $user = Auth::user();
                             ?>
                             @if($user->role==1)
-                            <li><a class="nav-link" href="{{ url('league') }}">My League</a></li>
-                            <li><a class="nav-link" href="{{ url('team') }}">My Team</a></li>
+                            <li><a class="nav-link" href="{{ url('league') }}">{{__('messages.my_league')}}</a></li>
+                            <li><a class="nav-link" href="{{ url('team') }}">{{__('messages.my_team')}}</a></li>
                             @endif
                             @if($user->role==2)
-                            <li><a class="nav-link" href="{{ url('team') }}">My Team</a></li>
+                            <li><a class="nav-link" href="{{ url('team') }}">{{__('messages.my_team')}}</a></li>
                             @endif
                             @if($user->role==3)
                             <?php 
@@ -77,29 +78,43 @@
                             @if($team)
                             <?php 
                                 $game = App\Game::where('VisitingTeam','=',$team->id)->orWhere('HostTeam','=',$team->id)->get();
-                                $game = $game->where('HomeScore','=',NULL)->first();
+                                $game = $game->where('HomeScore','=',NULL)->where('VisitorScore','=',NULL)->first();
                             ?>
                             @if($game)
-                            <li><a class="nav-link" href='{{url('games='.$game->id.'/update')}}'>Next Game</a></li>
+                            <li><a class="nav-link" href='{{url('games='.$game->id.'/update')}}'>{{__('messages.next_game')}}</a></li>
                             @endif
                             @endif
                             @endif 
                             @if($user->role==4)
-                            <li><a class="nav-link" href="/admin/menu">Admin</a></li>
+                            <li><a class="nav-link" href="/admin/menu">{{__('messages.admin')}}</a></li>
                             @endif 
                         @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                {{__('messages.languages')}} <span class="caret"></span>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="lang/en">
+                                    {{__('messages.english')}}
+                                </a>
+                                <a class="dropdown-item" href="lang/lv">
+                                    {{__('messages.latvian')}}
+                                </a>
+                            </div>
+                        </li>
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('messages.login') }}</a>
                             </li>
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('messages.register') }}</a>
                                 </li>
                             @endif
                         @else
@@ -112,7 +127,7 @@
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        {{ __('messages.logout') }}
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -131,9 +146,10 @@
                     <div class="row justify-content-center">
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header"><h4>Today's Games</h4></div>
+                                <div class="card-header"><h4>{{__('messages.today_games')}}</h4></div>
                                     <div class="card-body">
                                         <?php 
+                                            date_default_timezone_set('Europe/Riga');
                                             $date = date('H:i:s');
                                             if(strtotime($date)<strtotime('06:00:00'))
                                             {
@@ -194,7 +210,7 @@
                                                                 $log = App\Goal::where('game','=',$game->id);
                                                                 foreach($log as $goal)
                                                                 {
-                                                                    if($goal->team==$game->HostTeam) $goals++;
+                                                                    if($goal->team==$game-VisitingTeam) $goals++;
                                                                 }
                                                             ?>
                                                             {{$goals}}
@@ -208,7 +224,7 @@
                                         @endforeach
                                         @endif
                                         @if($counter==0)
-                                        There are no games today.
+                                        {{__('messages.no_games')}}
                                         @endif
                                     </div>
                                 </div>
