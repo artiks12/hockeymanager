@@ -56,10 +56,20 @@ Route::get('games', 'GameController@index');
 Route::get('games={id}/{page}', 'GameController@show');
 Route::get('games/search', 'GameController@search');
 Route::post('game={game}/team={team}/rosterupdate', 'GameController@roster');
+Route::post('game={game}/team={team}/addGoal', 'GameController@addGoal');
+Route::post('game={game}/team={team}/addPenalty', 'GameController@addPenalty');
+Route::get('game={game}/finish', 'GameController@finish');
+Route::post('game={game}/team={team}/goalie={player}', 'GameController@updateGoalie');
+Route::post('game={game}/team={team}/field={player}', 'GameController@updateField');
 
 Route::get('admin/{page}','AdminController@index');
 Route::delete('admin/removeUser','AdminController@user');
+Route::post('admin/giveLeague','AdminController@leagueGive');
+Route::post('admin/giveTeam','AdminController@teamGive');
+Route::post('admin/makeLeague','AdminController@leagueMake');
+Route::post('admin/makeTeam','AdminController@teamMake');
 
+Route::get('lang/{locale}','LanguageController');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
