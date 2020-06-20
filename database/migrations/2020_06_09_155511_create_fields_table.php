@@ -20,15 +20,16 @@ class CreateFieldsTable extends Migration
             $table->foreignId('season')->constrained();
             $table->foreignId('team')->constrained();
             $table->foreignId('game')->constrained();
-            $table->integer('games');
-            $table->integer('goals');
-            $table->integer('assists');
-            $table->integer('plus_minus');
-            $table->integer('PIM');
-            $table->integer('faceoffs');
-            $table->integer('faceoffsWon');
-            $table->integer('shots');
-            $table->integer('blockedShots');
+            $table->integer('games')->default(0);
+            $table->integer('goals')->default(0);
+            $table->integer('assists')->default(0);
+            $table->integer('plus_minus')->default(0);
+            $table->integer('PIM')->default(0);
+            $table->integer('faceoffs')->default(0);
+            $table->integer('faceoffsWon')->default(0);
+            $table->integer('shots')->default(0);
+            $table->integer('blockedShots')->default(0);
+            $table->integer('is_set')->default(0);
         });
     }
 
