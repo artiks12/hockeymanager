@@ -24,15 +24,22 @@ class TeamController extends Controller
     }
     public function begin()
     {
-        $user = auth()->user();
-        if(Team::where('manager','=',$user->id)->exists()) 
+        if(auth()->user())
         {
-            $team = Team::where('manager','=',$user->id)->first();
-            return redirect('team='.$team->id.'/page=home');
+            $user = auth()->user();
+            if(Team::where('manager','=',$user->id)->exists()) 
+            {
+                $team = Team::where('manager','=',$user->id)->first();
+                return redirect('team='.$team->id.'/page=home');
+            }
+            else
+            {
+                return view('myTeam', array('league' => 0));
+            }
         }
         else
         {
-            return view('myTeam', array('league' => 0));
+            return redirect('teams');
         }
     }
     /**
@@ -42,23 +49,39 @@ class TeamController extends Controller
      */
     public function menu($id, $page = 'home')
     {
-        $info = Team::where('id','=',$id)->first();
-        $games = Game::where('HostTeam','=',$id)->orWhere('VisitingTeam','=',$id)->get();
-        $players = Player::all();
-        if(count($games)>0)
+        $user = auth()->user();
+        if($user)
         {
-            $nextGame = $games->where('season','=',$info->season)->where('HomeScore','=',NULL)->sortBy('id')->first();
-            if($nextGame->HostTeam==$info->id)
+            $info = Team::where('id','=',$id)->first();
+            if($info->manager==$user->id)
             {
-                $opponent = Team::where('id','=',$nextGame->VisitingTeam)->first();
+                $games = Game::where('HostTeam','=',$id)->orWhere('VisitingTeam','=',$id)->get();
+                $games = $games->where('HomeScore','=',NULL)->where('VisitorScore','=',NULL);
+                $players = Player::all();
+                if(count($games)>0)
+                {
+                    $nextGame = $games->where('season','=',$info->season)->sortBy('id')->first();
+                    if($nextGame->HostTeam==$info->id)
+                    {
+                        $opponent = Team::where('id','=',$nextGame->VisitingTeam)->first();
+                    }
+                    else
+                    {
+                        $opponent = Team::where('id','=',$nextGame->HostTeam)->first();
+                    }
+                    return view('myTeam',array('players' => $players, 'opponent' => $opponent, 'info' => $info, 'league' => 1, 'page' => $page, 'games' => $games, 'nextGame' => $nextGame));
+                }
+                return view('myTeam',array('nextGame' => NULL,'players' => $players, 'info' => $info, 'league' => 1, 'page' => $page, 'games' => $games));
             }
             else
             {
-                $opponent = Team::where('id','=',$nextGame->HostTeam)->first();
+                return redirect('teams='.$id.'/page=roster');
             }
-            return view('myTeam',array('players' => $players, 'opponent' => $opponent, 'info' => $info, 'league' => 1, 'page' => $page, 'games' => $games, 'nextGame' => $nextGame));
         }
-        return view('myTeam',array('nextGame' => NULL,'players' => $players, 'info' => $info, 'league' => 1, 'page' => $page, 'games' => $games));
+        else
+        {
+            return redirect('teams='.$id.'/page=roster');
+        }
     }
     public function search(Request $request)
     {
