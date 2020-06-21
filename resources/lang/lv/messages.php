@@ -154,6 +154,7 @@ return [
     
     
     //myTeam.blade.php
+    'team_maker' => 'Komandas Veidotājs',
     'menu' => 'Izvelne',
     'for' => 'priekš',
     'for_season' => 'sezonas',
