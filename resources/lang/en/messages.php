@@ -156,6 +156,7 @@ return [
     
     
     //myTeam.blade.php
+    'team_maker' => 'Team Maker',
     'menu' => 'Menu',
     'for' => 'for',
     'season' => 'season',
